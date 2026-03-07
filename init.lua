@@ -873,6 +873,8 @@ require('lazy').setup({
     },
   },
 
+  --[[
+  
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
@@ -894,7 +896,43 @@ require('lazy').setup({
       vim.cmd.colorscheme 'tokyonight-night'
     end,
   },
+  --]]
 
+  {
+    'Mofiqul/adwaita.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme 'adwaita'
+
+      local colors = {
+        call = '#FFE48A',
+        decl = '#F1D164',
+        operator = '#DC88DA',
+        type_blue = '#60C9E1',
+      }
+
+      --function declare colour
+      vim.api.nvim_set_hl(0, '@function', { fg = colors.decl })
+      vim.api.nvim_set_hl(0, '@method', { fg = colors.decl })
+
+      --function call colour
+      vim.api.nvim_set_hl(0, '@function.call', { fg = colors.call })
+      vim.api.nvim_set_hl(0, '@method.call', { fg = colors.call })
+
+      -- Operator Highlights
+      -- Standard Vim operator group
+      vim.api.nvim_set_hl(0, 'Operator', { fg = colors.operator })
+      -- Treesitter operator group
+      vim.api.nvim_set_hl(0, '@operator', { fg = colors.operator })
+
+      -- Classes, Structs, and Types
+      -- In C++, these fall under @type and @type.builtin
+      vim.api.nvim_set_hl(0, '@type', { fg = colors.type_blue })
+      vim.api.nvim_set_hl(0, '@type.definition', { fg = colors.type_blue })
+      vim.api.nvim_set_hl(0, 'StorageClass', { fg = colors.type_blue }) -- For 'struct'/'class' keywords
+    end,
+  },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
