@@ -128,8 +128,8 @@ vim.o.breakindent = true
 vim.o.undofile = true
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
---vim.o.ignorecase = true
---vim.o.smartcase = true
+vim.o.ignorecase = true
+vim.o.smartcase = true
 
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
@@ -168,6 +168,22 @@ vim.o.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+
+--folding blocks of code
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldcolumn = '1' -- Shows a small sidebar for fold indicators
+vim.opt.foldlevel = 99 -- Start with all folds open
+
+---- Save folds when leaving a buffer, load them when entering
+vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
+  pattern = { '*' },
+  command = 'silent! mkview',
+})
+vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
+  pattern = { '*' },
+  command = 'silent! loadview',
+})
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -910,6 +926,7 @@ require('lazy').setup({
         decl = '#F1D164',
         operator = '#DC88DA',
         type_blue = '#60C9E1',
+        primitive_blue = '#B5F0FC',
       }
 
       --function declare colour
@@ -931,6 +948,10 @@ require('lazy').setup({
       vim.api.nvim_set_hl(0, '@type', { fg = colors.type_blue })
       vim.api.nvim_set_hl(0, '@type.definition', { fg = colors.type_blue })
       vim.api.nvim_set_hl(0, 'StorageClass', { fg = colors.type_blue }) -- For 'struct'/'class' keywords
+
+      -- 4. Simple Data Types (Barely Blue)
+      vim.api.nvim_set_hl(0, '@type.builtin', { fg = colors.primitive_blue })
+      vim.api.nvim_set_hl(0, 'Type', { fg = colors.primitive_blue })
     end,
   },
   -- Highlight todo, notes, etc in comments
