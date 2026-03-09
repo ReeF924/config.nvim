@@ -247,6 +247,11 @@ end
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
+-- forces Lua to check the new RTP for the 'lazy' module
+if not pcall(require, 'lazy') then
+  -- This shouldn't happen if the clone worked, but it helps debug
+  error('Lazy still not found after prepending to RTP. Path: ' .. lazypath)
+end
 -- [[ Configure and install plugins ]]
 --
 --  To check the current status of your plugins, run
