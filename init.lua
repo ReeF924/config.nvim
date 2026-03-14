@@ -365,10 +365,8 @@ require('lazy').setup({
   },
 
   -- NOTE: Plugins can specify dependencies.
-  --
   -- The dependencies are proper plugin specifications as well - anything
   -- you do for a plugin at the top level, you can do for a dependency.
-  --
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
 
   { -- Fuzzy Finder (files, lsp, etc)
@@ -927,6 +925,8 @@ require('lazy').setup({
         operator = '#DC88DA',
         type_blue = '#60C9E1',
         primitive_blue = '#B5F0FC',
+        --field_purple = '#B093BF',
+        field_purple = '#dec7ea',
       }
 
       --function declare colour
@@ -952,6 +952,41 @@ require('lazy').setup({
       -- 4. Simple Data Types (Barely Blue)
       vim.api.nvim_set_hl(0, '@type.builtin', { fg = colors.primitive_blue })
       vim.api.nvim_set_hl(0, 'Type', { fg = colors.primitive_blue })
+
+      -- 5. Class Fields (Members)
+      vim.api.nvim_set_hl(0, '@variable.member', { fg = colors.field_purple })
+      -- Some languages/versions still use @field
+      vim.api.nvim_set_hl(0, '@field', { fg = colors.field_purple })
+
+      -- Specifically for cpp as the above doesn't work for it
+      -- Target the high-priority LSP Semantic Tokens directly
+      vim.api.nvim_set_hl(0, '@lsp.type.property.cpp', { fg = colors.field_purple })
+      -- Also target the complex 'typemod' tokens shown in your Inspect output
+      vim.api.nvim_set_hl(0, '@lsp.typemod.property.classScope.cpp', { fg = colors.field_purple })
+
+      --By default keywords are bold, undo that
+      local keyword_groups = {
+        'Keyword',
+        '@keyword',
+        'Conditional', -- if, else
+        '@keyword.conditional',
+        'Repeat', -- for, while
+        '@keyword.repeat',
+        'Statement', -- return, break
+        '@keyword.return',
+        'Exception', -- try, catch
+      }
+
+      for _, group in ipairs(keyword_groups) do
+        -- We get the current color of the group so we don't change the actual color,
+        -- then we force bold to false.
+        local current_hl = vim.api.nvim_get_hl(0, { name = group, link = false })
+        vim.api.nvim_set_hl(0, group, {
+          fg = current_hl.fg,
+          bold = false,
+          italic = false, -- Optional: set to true if you prefer italics over bold
+        })
+      end
     end,
   },
   -- Highlight todo, notes, etc in comments
