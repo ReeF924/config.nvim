@@ -358,7 +358,7 @@ require('lazy').setup({
       -- Document existing key chains
       spec = {
         { '<leader>s', group = '[S]earch' },
-        { '<leader>t', group = '[T]oggle' },
+        { '<leader>t', group = '[T]ime/[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
     },
@@ -987,6 +987,14 @@ require('lazy').setup({
           italic = false, -- Optional: set to true if you prefer italics over bold
         })
       end
+
+      -- 6. Namespaces (e.g., std::)
+      -- The same colour as the keyword class and struct
+      vim.api.nvim_set_hl(0, '@lsp.type.namespace.cpp', { link = 'Keyword' })
+
+      -- Treesitter fallback for other languages or if LSP is slow to load
+      vim.api.nvim_set_hl(0, '@module', { link = 'Keyword' })
+      vim.api.nvim_set_hl(0, '@namespace', { link = 'Keyword' })
     end,
   },
   -- Highlight todo, notes, etc in comments
