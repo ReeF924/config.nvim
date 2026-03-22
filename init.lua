@@ -170,23 +170,12 @@ vim.o.scrolloff = 10
 vim.o.confirm = true
 
 --folding blocks of code
-vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-vim.opt.foldcolumn = '1' -- Shows a small sidebar for fold indicators
-vim.opt.foldlevel = 99 -- Start with all folds open
-
----- Save folds when leaving a buffer, load them when entering
-vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
-  pattern = { '*' },
-  command = 'silent! mkview',
-})
-vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
-  pattern = { '*' },
-  command = 'silent! loadview',
-})
+vim.opt.foldmethod = 'indent'
+vim.opt.foldlevel = 1
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
+--
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -926,7 +915,7 @@ require('lazy').setup({
         type_blue = '#60C9E1',
         primitive_blue = '#B5F0FC',
         --field_purple = '#B093BF',
-        field_purple = '#dec7ea',
+        field_purple = '#E2BBF7',
       }
 
       --function declare colour
