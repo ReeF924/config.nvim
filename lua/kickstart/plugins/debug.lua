@@ -57,6 +57,16 @@ return {
       desc = 'Debug: Step Out',
     },
     {
+      '<F4>',
+      function()
+        require('dap').terminate()
+        require('dapui').close()
+        -- This ensures the internal state is cleared even if the process is a zombie
+        require('dap').disconnect { terminateDebuggee = true }
+      end,
+      desc = 'Debug: Stop and Close UI',
+    },
+    {
       '<leader>b',
       function()
         require('dap').toggle_breakpoint()
@@ -131,7 +141,7 @@ return {
             { id = 'scopes', size = 0.75 }, -- Variables take up 75% of bottom
             { id = 'watches', size = 0.25 },
           },
-          size = 10, -- 10 lines high
+          size = 18, -- 10 lines high
           position = 'bottom',
         },
       },

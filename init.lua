@@ -171,7 +171,7 @@ vim.o.confirm = true
 
 --folding blocks of code
 vim.opt.foldmethod = 'indent'
-vim.opt.foldlevel = 1
+vim.opt.foldlevel = 99
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
