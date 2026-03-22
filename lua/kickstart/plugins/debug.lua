@@ -7,6 +7,7 @@
 -- kickstart.nvim and not kitchen-sink.nvim ;)
 
 return {
+
   -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
   -- NOTE: And you can specify dependencies as well
@@ -21,8 +22,9 @@ return {
     'mason-org/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
 
-    -- Add your own debuggers here
-    'leoluz/nvim-dap-go',
+    -- Add your own debuggers here (the specific example for go
+    -- )
+    --'leoluz/nvim-dap-go',
   },
   keys = {
     -- Basic debugging keymaps, feel free to change to your liking!
@@ -94,13 +96,46 @@ return {
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        'delve',
+        'codellab',
+      },
+    }
+
+    dap.adapters.codelldb = {
+      type = 'server',
+      port = '${port}',
+      executable = {
+        -- We use absolute path expansion to be safe
+        command = vim.fn.expand '$HOME' .. '/.local/share/nvim/mason/bin/codelldb',
+        args = { '--port', '${port}' },
       },
     }
 
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
     dapui.setup {
+
+      layouts = {
+        {
+          elements = {
+            -- Elements for the left sidebar
+            { id = 'stacks', size = 0.25 },
+            { id = 'breakpoints', size = 0.25 },
+            { id = 'repl', size = 0.5 },
+          },
+          size = 40, -- This makes the left sidebar 40 columns wide
+          position = 'left',
+        },
+        {
+          elements = {
+            -- Elements for the bottom tray (Where your variables are now)
+            { id = 'scopes', size = 0.75 }, -- Variables take up 75% of bottom
+            { id = 'watches', size = 0.25 },
+          },
+          size = 10, -- 10 lines high
+          position = 'bottom',
+        },
+      },
+
       -- Set icons to characters that are more likely to work in every terminal.
       --    Feel free to remove or use ones that you like more! :)
       --    Don't feel like these are good choices.
@@ -132,17 +167,32 @@ return {
     --   vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
     -- end
 
+    dap.configurations.cpp = {
+      { -- <--- This brace starts the list
+        name = 'Launch file',
+        type = 'codelldb',
+        request = 'launch',
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        setupCommands = {
+          {
+            text = '-enable-pretty-printing',
+            description = 'enable pretty printing',
+            ignoreFailures = false,
+          },
+        },
+      }, -- <--- This brace ends the first configuration in the list
+    }
+
+    -- Support C and Rust too since they use the same debugger
+    dap.configurations.c = dap.configurations.cpp
+    dap.configurations.rust = dap.configurations.cpp
+
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
-
-    -- Install golang specific config
-    require('dap-go').setup {
-      delve = {
-        -- On Windows delve must be run attached or it crashes.
-        -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
-        detached = vim.fn.has 'win32' == 0,
-      },
-    }
   end,
 }
