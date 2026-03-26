@@ -106,7 +106,8 @@ return {
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        'codellab',
+        'codelldb',
+        'js-debug-adapter',
       },
     }
 
@@ -119,6 +120,24 @@ return {
         args = { '--port', '${port}' },
       },
     }
+
+    -- Adapter configuration for Node/JS/TS
+    -- NOTE: typecript files have to have "sourceMap": true in tsconfig.json
+    if not dap.adapters['pwa-node'] then
+      dap.adapters['pwa-node'] = {
+        type = 'server',
+        host = 'localhost',
+        port = '${port}',
+        executable = {
+          command = 'node',
+          -- This path is where Mason installs the js-debug-adapter
+          args = {
+            vim.fn.stdpath 'data' .. '/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js',
+            '${port}',
+          },
+        },
+      }
+    end
 
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
@@ -196,6 +215,31 @@ return {
         },
       }, -- <--- This brace ends the first configuration in the list
     }
+
+    -- Shared configuration for JS and TS
+    local js_config = {
+      {
+        type = 'pwa-node',
+        request = 'launch',
+        name = 'Launch Current File (Node.js)',
+        program = '${file}',
+        cwd = '${workspaceFolder}',
+        sourceMaps = true, -- Crucial for TypeScript!
+        protocol = 'inspector',
+        console = 'integratedTerminal',
+      },
+      {
+        type = 'pwa-node',
+        request = 'attach',
+        name = 'Attach to Process',
+        processId = require('dap.utils').pick_process,
+        cwd = '${workspaceFolder}',
+      },
+    }
+
+    -- Apply the config to the relevant filetypes
+    dap.configurations.javascript = js_config
+    dap.configurations.typescript = js_config
 
     -- Support C and Rust too since they use the same debugger
     dap.configurations.c = dap.configurations.cpp
