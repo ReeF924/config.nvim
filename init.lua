@@ -1,106 +1,13 @@
---[[
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-========                                    .-----.          ========
-========         .----------------------.   | === |          ========
-========         |.-""""""""""""""""""-.|   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||   KICKSTART.NVIM   ||   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||                    ||   |-----|          ========
-========         ||:Tutor              ||   |:::::|          ========
-========         |'-..................-'|   |____o|          ========
-========         `"")----------------(""`   ___________      ========
-========        /::::::::::|  |::::::::::\  \ no mouse \     ========
-========       /:::========|  |==hjkl==:::\  \ required \    ========
-========      '""""""""""""'  '""""""""""""'  '""""""""""'   ========
-========                                                     ========
-=====================================================================
-=====================================================================
-
-What is Kickstart?
-
-  Kickstart.nvim is *not* a distribution.
-
-  Kickstart.nvim is a starting point for your own configuration.
-    The goal is that you can read every line of code, top-to-bottom, understand
-    what your configuration is doing, and modify it to suit your needs.
-
-    Once you've done that, you can start exploring, configuring and tinkering to
-    make Neovim your own! That might mean leaving Kickstart just the way it is for a while
-    or immediately breaking it into modular pieces. It's up to you!
-
-    If you don't know anything about Lua, I recommend taking some time to read through
-    a guide. One possible example which will only take 10-15 minutes:
-      - https://learnxinyminutes.com/docs/lua/
-
-    After understanding a bit more about Lua, you can use `:help lua-guide` as a
-    reference for how Neovim integrates Lua.
-    - :help lua-guide
-    - (or HTML version): https://neovim.io/doc/user/lua-guide.html
-
-Kickstart Guide:
-
-  TODO: The very first thing you should do is to run the command `:Tutor` in Neovim.
-
-    If you don't know what this means, type the following:
-      - <escape key>
-      - :
-      - Tutor
-      - <enter key>
-
-    (If you already know the Neovim basics, you can skip this step.)
-
-  Once you've completed that, you can continue working through **AND READING** the rest
-  of the kickstart init.lua.
-
-  Next, run AND READ `:help`.
-    This will open up a help window with some basic information
-    about reading, navigating and searching the builtin help documentation.
-
-    This should be the first place you go to look when you're stuck or confused
-    with something. It's one of my favorite Neovim features.
-
-    MOST IMPORTANTLY, we provide a keymap "<space>sh" to [s]earch the [h]elp documentation,
-    which is very useful when you're not exactly sure of what you're looking for.
-
-  I have left several `:help X` comments throughout the init.lua
-    These are hints about where to find more information about the relevant settings,
-    plugins or Neovim features used in Kickstart.
-
-   NOTE: Look for lines like this
-
-    Throughout the file. These are for you, the reader, to help you understand what is happening.
-    Feel free to delete them once you know what you're doing, but they should serve as a guide
-    for when you are first encountering a few different constructs in your Neovim config.
-
-If you experience any errors while trying to install kickstart, run `:checkhealth` for more info.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now! :)
---]]
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
-
--- Make line numbers default
---vim.o.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
 vim.o.relativenumber = true
 
 --change tab width
@@ -108,11 +15,13 @@ vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 vim.o.softtabstop = 2
 vim.o.expandtab = true
+
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
 
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
+
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -201,11 +110,8 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
--- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
--- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
--- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
--- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
--- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+-- Toggle Neo-tree on the right side as a float
+vim.keymap.set('n', '<C-n>', '<cmd>Neotree toggle float right<cr>', { desc = 'Toggle File Explorer' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -876,145 +782,6 @@ require('lazy').setup({
     },
   },
 
-  --[[
-  
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-        },
-      }
-
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
-    end,
-  },
-  --]]
-  -- Create a highlight group for the current debugging line
-
-  {
-    'Mofiqul/adwaita.nvim',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'adwaita'
-
-      local colors = {
-        call = '#FFE48A',
-        decl = '#F1D164',
-        operator = '#DC88DA',
-        type_blue = '#60C9E1',
-        primitive_blue = '#B5F0FC',
-        --field_purple = '#B093BF',
-        field_purple = '#E2BBF7',
-      }
-
-      --function declare colour
-      vim.api.nvim_set_hl(0, '@function', { fg = colors.decl })
-      vim.api.nvim_set_hl(0, '@method', { fg = colors.decl })
-
-      --function call colour
-      vim.api.nvim_set_hl(0, '@function.call', { fg = colors.call })
-      vim.api.nvim_set_hl(0, '@method.call', { fg = colors.call })
-
-      -- Operator Highlights
-      -- Standard Vim operator group
-      vim.api.nvim_set_hl(0, 'Operator', { fg = colors.operator })
-      -- Treesitter operator group
-      vim.api.nvim_set_hl(0, '@operator', { fg = colors.operator })
-
-      -- Classes, Structs, and Types
-      -- In C++, these fall under @type and @type.builtin
-      vim.api.nvim_set_hl(0, '@type', { fg = colors.type_blue })
-      vim.api.nvim_set_hl(0, '@type.definition', { fg = colors.type_blue })
-      vim.api.nvim_set_hl(0, 'StorageClass', { fg = colors.type_blue }) -- For 'struct'/'class' keywords
-
-      -- 4. Simple Data Types (Barely Blue)
-      vim.api.nvim_set_hl(0, '@type.builtin', { fg = colors.primitive_blue })
-      vim.api.nvim_set_hl(0, 'Type', { fg = colors.primitive_blue })
-
-      -- 5. Class Fields (Members)
-      vim.api.nvim_set_hl(0, '@variable.member', { fg = colors.field_purple })
-      -- Some languages/versions still use @field
-      vim.api.nvim_set_hl(0, '@field', { fg = colors.field_purple })
-
-      -- Specifically for cpp as the above doesn't work for it
-      -- Target the high-priority LSP Semantic Tokens directly
-      vim.api.nvim_set_hl(0, '@lsp.type.property.cpp', { fg = colors.field_purple })
-      -- Also target the complex 'typemod' tokens shown in your Inspect output
-      vim.api.nvim_set_hl(0, '@lsp.typemod.property.classScope.cpp', { fg = colors.field_purple })
-
-      --By default keywords are bold, undo that
-      local keyword_groups = {
-        'Keyword',
-        '@keyword',
-        'Conditional', -- if, else
-        '@keyword.conditional',
-        'Repeat', -- for, while
-        '@keyword.repeat',
-        'Statement', -- return, break
-        '@keyword.return',
-        'Exception', -- try, catch
-      }
-
-      for _, group in ipairs(keyword_groups) do
-        -- We get the current color of the group so we don't change the actual color,
-        -- then we force bold to false.
-        local current_hl = vim.api.nvim_get_hl(0, { name = group, link = false })
-        vim.api.nvim_set_hl(0, group, {
-          fg = current_hl.fg,
-          bold = false,
-          italic = false, -- Optional: set to true if you prefer italics over bold
-        })
-      end
-
-      -- 6. Namespaces (e.g., std::)
-      -- The same colour as the keyword class and struct
-      vim.api.nvim_set_hl(0, '@lsp.type.namespace.cpp', { link = 'Keyword' })
-
-      -- Treesitter fallback for other languages or if LSP is slow to load
-      vim.api.nvim_set_hl(0, '@module', { link = 'Keyword' })
-      vim.api.nvim_set_hl(0, '@namespace', { link = 'Keyword' })
-
-      -- ... (your existing namespace highlights) ...
-      vim.api.nvim_set_hl(0, '@namespace', { link = 'Keyword' })
-
-      ---------------------------------------------------------
-      -- DEBUGGER (DAP) STYLING
-      ---------------------------------------------------------
-      -- 1. Define the Highlight Groups
-      -- We use the same dark grey background (#31353f) from your previous snippet
-      vim.api.nvim_set_hl(0, 'DapBreakpoint', { fg = '#993939', bg = '#31353f' })
-      vim.api.nvim_set_hl(0, 'DapLogPoint', { fg = '#61afef', bg = '#31353f' })
-      vim.api.nvim_set_hl(0, 'DapStopped', { fg = '#98c379', bg = '#31353f', bold = true })
-
-      -- 2. Define the Signs (Icons and Line/Number highlights)
-      -- 'linehl' is what colors the background of the entire row
-      vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'DapBreakpoint', linehl = '', numhl = 'DapBreakpoint' })
-      vim.fn.sign_define('DapBreakpointCondition', { text = 'ﳁ', texthl = 'DapBreakpoint', linehl = '', numhl = 'DapBreakpoint' })
-      vim.fn.sign_define('DapBreakpointRejected', { text = '', texthl = 'DapBreakpoint', linehl = '', numhl = 'DapBreakpoint' })
-      vim.fn.sign_define('DapLogPoint', { text = '', texthl = 'DapLogPoint', linehl = '', numhl = 'DapLogPoint' })
-
-      -- For the active line (Stopped), we apply the background to 'linehl'
-      vim.fn.sign_define('DapStopped', {
-        text = '',
-        texthl = 'DapStopped',
-        linehl = 'DapStopped', -- This creates the highlight bar
-        numhl = 'DapStopped',
-      })
-    end,
-  },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -1093,8 +860,6 @@ require('lazy').setup({
   require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -1128,6 +893,3 @@ require('lazy').setup({
     },
   },
 })
-
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
