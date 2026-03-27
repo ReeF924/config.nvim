@@ -110,6 +110,8 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- Map Control+3 to toggle between the last two files (Alternate Buffer)
+vim.keymap.set('n', '<leader>a', '<C-6>', { desc = 'Switch to alternate buffer' })
 -- Toggle Neo-tree on the right side as a float
 vim.keymap.set('n', '<C-n>', '<cmd>Neotree toggle float right<cr>', { desc = 'Toggle File Explorer' })
 
@@ -255,6 +257,8 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]ime/[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>d', group = '[D]ebug' },
+        { '<leader>b', group = '[B]uffer' },
       },
     },
   },
@@ -577,7 +581,21 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        clangd = {},
+        clangd = {
+          -- This section tells clangd which flags to use if a
+          -- compile_commands.json file isn't found in your project.
+          init_options = {
+            fallbackFlags = {
+              '-Wall',
+              '-Wextra',
+              '-pedantic',
+              '-Wconversion',
+              '-Wsign-conversion',
+              '-Wfloat-conversion',
+              '-std=c++20', -- Change to your preferred C++ version
+            },
+          },
+        },
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -772,7 +790,7 @@ require('lazy').setup({
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        documentation = { auto_show = true, auto_show_delay_ms = 200 },
       },
 
       sources = {

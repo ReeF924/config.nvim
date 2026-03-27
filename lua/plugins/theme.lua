@@ -89,6 +89,9 @@ return {
     vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = '#2d2d2d' })
     vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = '#2d2d2d' })
 
+    -- Change the matchparen highlight to look like Visual mode
+    vim.api.nvim_set_hl(0, 'MatchParen', { link = 'Visual' })
+
     ---------------------------------------------------------
     -- DEBUGGER (DAP) STYLING
     ---------------------------------------------------------
