@@ -160,7 +160,7 @@ return {
             { id = 'scopes', size = 0.75 }, -- Variables take up 75% of bottom
             { id = 'watches', size = 0.25 },
           },
-          size = 18, -- 10 lines high
+          size = 16, -- 10 lines high
           position = 'bottom',
         },
       },
