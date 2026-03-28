@@ -82,6 +82,16 @@ vim.o.confirm = true
 vim.opt.foldmethod = 'indent'
 vim.opt.foldlevel = 99
 
+-- Disable automatic comment insertion on new lines
+vim.api.nvim_create_autocmd('BufEnter', {
+  callback = function()
+    -- 'r' = hit enter in Insert mode
+    -- 'o' = hit 'o' or 'O' in Normal mode
+    -- 'c' = auto-wrap long comments
+    vim.opt.formatoptions:remove { 'c', 'r', 'o' }
+  end,
+})
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 --
