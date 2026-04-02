@@ -5,51 +5,6 @@ return {
   config = function()
     vim.cmd.colorscheme 'adwaita'
 
-    local colors = {
-      call = '#FFE48A',
-      decl = '#F1D164',
-      operator = '#DC88DA',
-      type_blue = '#60C9E1',
-      primitive_blue = '#B5F0FC',
-      --field_purple = '#B093BF',
-      field_purple = '#E2BBF7',
-    }
-
-    --function declare colour
-    vim.api.nvim_set_hl(0, '@function', { fg = colors.decl })
-    vim.api.nvim_set_hl(0, '@method', { fg = colors.decl })
-
-    --function call colour
-    vim.api.nvim_set_hl(0, '@function.call', { fg = colors.call })
-    vim.api.nvim_set_hl(0, '@method.call', { fg = colors.call })
-
-    -- Operator Highlights
-    -- Standard Vim operator group
-    vim.api.nvim_set_hl(0, 'Operator', { fg = colors.operator })
-    -- Treesitter operator group
-    vim.api.nvim_set_hl(0, '@operator', { fg = colors.operator })
-
-    -- Classes, Structs, and Types
-    -- In C++, these fall under @type and @type.builtin
-    vim.api.nvim_set_hl(0, '@type', { fg = colors.type_blue })
-    vim.api.nvim_set_hl(0, '@type.definition', { fg = colors.type_blue })
-    vim.api.nvim_set_hl(0, 'StorageClass', { fg = colors.type_blue }) -- For 'struct'/'class' keywords
-
-    -- 4. Simple Data Types (Barely Blue)
-    vim.api.nvim_set_hl(0, '@type.builtin', { fg = colors.primitive_blue })
-    vim.api.nvim_set_hl(0, 'Type', { fg = colors.primitive_blue })
-
-    -- 5. Class Fields (Members)
-    vim.api.nvim_set_hl(0, '@variable.member', { fg = colors.field_purple })
-    -- Some languages/versions still use @field
-    vim.api.nvim_set_hl(0, '@field', { fg = colors.field_purple })
-
-    -- Specifically for cpp as the above doesn't work for it
-    -- Target the high-priority LSP Semantic Tokens directly
-    vim.api.nvim_set_hl(0, '@lsp.type.property.cpp', { fg = colors.field_purple })
-    -- Also target the complex 'typemod' tokens shown in your Inspect output
-    vim.api.nvim_set_hl(0, '@lsp.typemod.property.classScope.cpp', { fg = colors.field_purple })
-
     --By default keywords are bold, undo that
     local keyword_groups = {
       'Keyword',
@@ -74,16 +29,51 @@ return {
       })
     end
 
-    -- 6. Namespaces (e.g., std::)
-    -- The same colour as the keyword class and struct
-    vim.api.nvim_set_hl(0, '@lsp.type.namespace.cpp', { link = 'Keyword' })
+    local colours = {
+      --call = '#FFE48A',
+      meth = '#F1D164',
+      operator = '#DC88DA',
+      type_blue = '#60C9E1',
+      primitive_blue = '#B5F0FC',
+      --field_purple = '#B093BF',
+      field_purple = '#E2BBF7',
+      literal = '#9fabf4',
+    }
 
-    -- Treesitter fallback for other languages or if LSP is slow to load
-    vim.api.nvim_set_hl(0, '@module', { link = 'Keyword' })
-    vim.api.nvim_set_hl(0, '@namespace', { link = 'Keyword' })
+    --function declare colour
+    vim.api.nvim_set_hl(0, '@function', { fg = colours.meth })
+    vim.api.nvim_set_hl(0, '@method', { fg = colours.meth })
 
-    -- ... (your existing namespace highlights) ...
-    vim.api.nvim_set_hl(0, '@namespace', { link = 'Keyword' })
+    --function call colour
+    vim.api.nvim_set_hl(0, '@function.call', { fg = colours.meth })
+    vim.api.nvim_set_hl(0, '@method.call', { fg = colours.meth })
+
+    -- Operator Highlights
+    -- Standard Vim operator group
+    vim.api.nvim_set_hl(0, 'Operator', { fg = colours.operator })
+    -- Treesitter operator group
+    vim.api.nvim_set_hl(0, '@operator', { fg = colours.operator })
+
+    -- Classes, Structs, and Types
+    -- In C++, these fall under @type and @type.builtin
+    vim.api.nvim_set_hl(0, '@type', { fg = colours.type_blue })
+    vim.api.nvim_set_hl(0, '@type.definition', { fg = colours.type_blue })
+    vim.api.nvim_set_hl(0, 'StorageClass', { fg = colours.type_blue }) -- For 'struct'/'class' keywords
+
+    -- Simple Data Types (Barely Blue)
+    vim.api.nvim_set_hl(0, '@type.builtin', { fg = colours.primitive_blue })
+    vim.api.nvim_set_hl(0, 'Type', { fg = colours.primitive_blue })
+
+    -- Class Fields (Members)
+    vim.api.nvim_set_hl(0, '@variable.member', { fg = colours.field_purple })
+    -- Some languages/versions still use @field
+    vim.api.nvim_set_hl(0, '@field', { fg = colours.field_purple })
+
+    -- Specifically for cpp as the above doesn't work for it
+    -- Target the high-priority LSP Semantic Tokens directly
+    vim.api.nvim_set_hl(0, '@lsp.type.property.cpp', { fg = colours.field_purple })
+    -- Also target the complex 'typemod' tokens shown in your Inspect output
+    vim.api.nvim_set_hl(0, '@lsp.typemod.property.classScope.cpp', { fg = colours.field_purple })
 
     -- Match the neo-tree sidebar background to a slightly darker Adwaita grey
     vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = '#2d2d2d' })
@@ -92,16 +82,27 @@ return {
     -- Change the matchparen highlight to look like Visual mode
     vim.api.nvim_set_hl(0, 'MatchParen', { link = 'Visual' })
 
+    -- General Constants (Numbers, etc.)
+    vim.api.nvim_set_hl(0, 'Constant', { fg = colours.literal })
+    vim.api.nvim_set_hl(0, '@constant', { link = 'Constant' })
+    -- 2. Numbers
+    vim.api.nvim_set_hl(0, 'Number', { link = 'Constant' })
+    vim.api.nvim_set_hl(0, '@number', { link = 'Constant' })
+    vim.api.nvim_set_hl(0, '@number.float', { link = 'Constant' })
+
+    -- Boolean Literals
+    vim.api.nvim_set_hl(0, '@boolean', { link = 'Constant' })
+    vim.api.nvim_set_hl(0, 'Boolean', { link = 'Constant' })
     ---------------------------------------------------------
     -- DEBUGGER (DAP) STYLING
     ---------------------------------------------------------
-    -- 1. Define the Highlight Groups
+    -- Define the Highlight Groups
     -- We use the same dark grey background (#31353f) from your previous snippet
     vim.api.nvim_set_hl(0, 'DapBreakpoint', { fg = '#993939', bg = '#31353f' })
     vim.api.nvim_set_hl(0, 'DapLogPoint', { fg = '#61afef', bg = '#31353f' })
     vim.api.nvim_set_hl(0, 'DapStopped', { fg = '#98c379', bg = '#31353f', bold = true })
 
-    -- 2. Define the Signs (Icons and Line/Number highlights)
+    -- Define the Signs (Icons and Line/Number highlights)
     -- 'linehl' is what colors the background of the entire row
     vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'DapBreakpoint', linehl = '', numhl = 'DapBreakpoint' })
     vim.fn.sign_define('DapBreakpointCondition', { text = 'ﳁ', texthl = 'DapBreakpoint', linehl = '', numhl = 'DapBreakpoint' })
