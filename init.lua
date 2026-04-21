@@ -125,6 +125,14 @@ vim.keymap.set('n', '<leader>a', '<C-6>', { desc = 'Switch to alternate buffer' 
 -- Toggle Neo-tree on the right side as a float
 vim.keymap.set('n', '<C-n>', '<cmd>Neotree toggle float right<cr>', { desc = 'Toggle File Explorer' })
 
+-- Show diagnostics in a floating window
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Diagnostics for curr line' })
+
+-- Move focus into the floating window (so you can scroll it)
+-- Press the keymap twice to jump into the window
+vim.diagnostic.config {
+  float = { focusable = true, border = 'rounded' },
+}
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -269,6 +277,18 @@ require('lazy').setup({
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
         { '<leader>d', group = '[D]ebug' },
         { '<leader>b', group = '[B]uffer' },
+        { '<leader>[1-9]', group = 'Switches to buffer 1-9,10' },
+
+        { '<leader>1', hidden = true },
+        { '<leader>2', hidden = true },
+        { '<leader>3', hidden = true },
+        { '<leader>4', hidden = true },
+        { '<leader>5', hidden = true },
+        { '<leader>6', hidden = true },
+        { '<leader>7', hidden = true },
+        { '<leader>8', hidden = true },
+        { '<leader>9', hidden = true },
+        { '<leader>0', hidden = true },
       },
     },
   },
@@ -592,18 +612,17 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {
-          -- This section tells clangd which flags to use if a
-          -- compile_commands.json file isn't found in your project.
+          cmd = {
+            'clangd',
+            '--background-index',
+            '--clang-tidy',
+            '--header-insertion=iwyu',
+            '--completion-style=detailed',
+            '--function-arg-placeholders',
+            '--fallback-style=llvm',
+          },
           init_options = {
-            fallbackFlags = {
-              '-Wall',
-              '-Wextra',
-              '-pedantic',
-              '-Wconversion',
-              '-Wsign-conversion',
-              '-Wfloat-conversion',
-              '-std=c++20', -- Change to your preferred C++ version
-            },
+            fallbackFlags = { '-std=c++23' },
           },
         },
         -- gopls = {},
