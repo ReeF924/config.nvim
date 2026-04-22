@@ -89,7 +89,9 @@ return {
       desc = 'Debug: See last session result.',
     },
   },
+
   config = function()
+    -- Custom function to toggle between Console and Scopes
     local dap = require 'dap'
     local dapui = require 'dapui'
 
@@ -138,7 +140,39 @@ return {
         },
       }
     end
+    -- Custom function to toggle between Console and Scopes
+    local function toggle_console_scopes()
+      local wins = vim.api.nvim_tabpage_list_wins(0)
+      local console_win = nil
+      local scopes_win = nil
 
+      for _, win in ipairs(wins) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        local name = vim.api.nvim_buf_get_name(buf)
+        if name:match 'DAP Console' then
+          console_win = win
+        end
+        if name:match 'DAP Scopes' then
+          scopes_win = win
+        end
+      end
+
+      -- If we are in the console, go to scopes. If in scopes, go to console.
+      local cur_win = vim.api.nvim_get_current_win()
+      if cur_win == console_win and scopes_win then
+        vim.api.nvim_set_current_win(scopes_win)
+      elseif cur_win == scopes_win and console_win then
+        vim.api.nvim_set_current_win(console_win)
+      elseif console_win then
+        vim.api.nvim_set_current_win(console_win)
+      end
+
+      -- Optional: Maximize the current window to "hide" the other
+      vim.cmd 'vertical resize' -- Reset sizes
+      vim.cmd 'resize'
+      -- If you want it to truly "hide" the other, you can use:
+      -- vim.api.nvim_win_set_height(0, 15)
+    end
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
     dapui.setup {
@@ -156,11 +190,10 @@ return {
         },
         {
           elements = {
-            -- Elements for the bottom tray (Where your variables are now)
-            { id = 'scopes', size = 0.75 }, -- Variables take up 75% of bottom
+            { id = 'scopes', size = 0.75 },
             { id = 'watches', size = 0.25 },
           },
-          size = 16, -- 10 lines high
+          size = 16,
           position = 'bottom',
         },
       },
@@ -204,6 +237,7 @@ return {
         program = function()
           return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
         end,
+        console = 'integratedTerminal',
         cwd = '${workspaceFolder}',
         stopOnEntry = false,
         setupCommands = {

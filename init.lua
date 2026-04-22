@@ -625,7 +625,15 @@ require('lazy').setup({
             '--fallback-style=llvm',
           },
           init_options = {
-            fallbackFlags = { '-std=c++23' },
+            fallbackFlags = {
+              '-Wall',
+              '-Wextra',
+              '-pedantic',
+              '-Wconversion',
+              '-Wsign-conversion',
+              '-Wfloat-conversion',
+              '-std=c++23',
+            },
           },
         },
         -- gopls = {},
