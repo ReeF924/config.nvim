@@ -128,6 +128,9 @@ vim.keymap.set('n', '<C-n>', '<cmd>Neotree toggle float right<cr>', { desc = 'To
 -- Show diagnostics in a floating window
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Diagnostics for curr line' })
 
+-- Accept code fixes
+vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = '[C]ode [A]ction' })
+
 -- Move focus into the floating window (so you can scroll it)
 -- Press the keymap twice to jump into the window
 vim.diagnostic.config {
