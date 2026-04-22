@@ -7,6 +7,7 @@ return {
     require('bufferline').setup {
       options = {
         mode = 'buffers', -- Tabs will represent open files
+        sort_by = 'id',
         numbers = 'ordinal',
         separator_style = 'slant', -- Looks modern (or use "thin", "thick")
         always_show_bufferline = true,
