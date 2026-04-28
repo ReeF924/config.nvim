@@ -635,6 +635,14 @@ require('lazy').setup({
               '-std=c++23',
             },
           },
+          capabilities = {
+            textDocument = {
+              foldingRange = {
+                dynamicRegistration = false,
+                lineFoldingOnly = true,
+              },
+            },
+          },
         },
         -- gopls = {},
         -- pyright = {},
