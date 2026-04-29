@@ -117,30 +117,40 @@ return {
       numhl = 'DapStopped',
     })
 
-    local comments_toggled = false
-    local function toggle_comment_color()
-      if not comments_toggled then
-        -- Switch to custom green
-        vim.api.nvim_set_hl(0, 'Comment', { fg = '#478c02' })
-        print 'Comments: Custom Green'
-        comments_toggled = true
-      else
-        -- Reset to theme default
-        -- We use 'link = "Comment"' or clear the override to let the theme take back over
-        -- The most robust way is to re-source the highlight or clear the specific fg
-        vim.api.nvim_set_hl(0, 'Comment', { link = 'Comment' })
-        -- If 'link' doesn't work with your specific theme, use:
-        vim.cmd [[hi clear Comment | hi link Comment CustomCommentDefault]]
-        -- Or simply restart the colorscheme:
-        local colors_name = vim.g.colors_name or 'default'
-        vim.cmd('colorscheme ' .. colors_name)
+    local original_colors = {}
 
-        print 'Comments: Default'
-        comments_toggled = false
+    local function toggle_comment_color()
+      -- The custom green in decimal
+      local target_green = 5680384
+
+      -- Groups to toggle
+      local groups = { 'Comment', '@comment' }
+
+      -- Check the first group to decide if we are turning it ON or OFF
+      local first_hl = vim.api.nvim_get_hl(0, { name = groups[1], link = false })
+      local is_turning_on = (first_hl.fg ~= target_green)
+
+      for _, group in ipairs(groups) do
+        if is_turning_on then
+          -- Save the original color if we haven't yet
+          if not original_colors[group] then
+            local current_hl = vim.api.nvim_get_hl(0, { name = group, link = false })
+            original_colors[group] = current_hl.fg
+          end
+          -- Apply custom green
+          vim.api.nvim_set_hl(0, group, { fg = '#56ad00' })
+        else
+          -- Restore original color
+          if original_colors[group] then
+            vim.api.nvim_set_hl(0, group, { fg = original_colors[group] })
+          else
+            -- Fallback if we somehow lost the original (resets to theme)
+            vim.cmd('hi clear ' .. group)
+          end
+        end
       end
     end
 
-    -- Keymap: <leader>tc (Toggle Comments)
-    vim.keymap.set('n', '<leader>tc', toggle_comment_color, { desc = '[T]oggle [C]omment Color' })
+    vim.keymap.set('n', '<leader>tc', toggle_comment_color, { desc = 'Toggle Comment Color (All Languages)' })
   end,
 }
