@@ -116,5 +116,31 @@ return {
       linehl = 'DapStopped', -- This creates the highlight bar
       numhl = 'DapStopped',
     })
+
+    local comments_toggled = false
+    local function toggle_comment_color()
+      if not comments_toggled then
+        -- Switch to custom green
+        vim.api.nvim_set_hl(0, 'Comment', { fg = '#478c02' })
+        print 'Comments: Custom Green'
+        comments_toggled = true
+      else
+        -- Reset to theme default
+        -- We use 'link = "Comment"' or clear the override to let the theme take back over
+        -- The most robust way is to re-source the highlight or clear the specific fg
+        vim.api.nvim_set_hl(0, 'Comment', { link = 'Comment' })
+        -- If 'link' doesn't work with your specific theme, use:
+        vim.cmd [[hi clear Comment | hi link Comment CustomCommentDefault]]
+        -- Or simply restart the colorscheme:
+        local colors_name = vim.g.colors_name or 'default'
+        vim.cmd('colorscheme ' .. colors_name)
+
+        print 'Comments: Default'
+        comments_toggled = false
+      end
+    end
+
+    -- Keymap: <leader>tc (Toggle Comments)
+    vim.keymap.set('n', '<leader>tc', toggle_comment_color, { desc = '[T]oggle [C]omment Color' })
   end,
 }

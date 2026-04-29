@@ -280,6 +280,7 @@ require('lazy').setup({
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
         { '<leader>d', group = '[D]ebug' },
         { '<leader>b', group = '[B]uffer' },
+        { '<leader>t', group = '[T]oggle' },
         { '<leader>[1-9]', group = 'Switches to buffer 1-9,10' },
 
         { '<leader>1', hidden = true },
