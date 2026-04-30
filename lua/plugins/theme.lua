@@ -34,7 +34,7 @@ return {
       meth = '#F1D164',
       operator = '#DC88DA',
       type_blue = '#60C9E1',
-      primitive_blue = '#B5F0FC',
+      primitive_blue = '#A1EDFC',
       --field_purple = '#B093BF',
       field_purple = '#E2BBF7',
       literal = '#9fabf4',
@@ -93,9 +93,21 @@ return {
     -- Boolean Literals
     vim.api.nvim_set_hl(0, '@boolean', { link = 'Constant' })
     vim.api.nvim_set_hl(0, 'Boolean', { link = 'Constant' })
-    ---------------------------------------------------------
+
+    -- Fix for size_t, uint32_t, and other standard types
+    -- clangd labels these as "type" but with the "defaultLibrary" modifier
+    vim.api.nvim_set_hl(0, '@lsp.type.type.cpp', { fg = colours.primitive_blue })
+    vim.api.nvim_set_hl(0, '@lsp.typemod.type.defaultLibrary.cpp', { fg = colours.primitive_blue })
+
+    -- Fix for auto* and auto&
+    -- Treesitter often splits 'auto' and '*' - we ensure both stay primitive_blue
+    -- or that the LSP type for the variable remains consistent.
+    vim.api.nvim_set_hl(0, '@lsp.type.builtin.cpp', { fg = colours.primitive_blue })
+
+    -- This targets the '*' when it is part of a type declaration in C++
+    vim.api.nvim_set_hl(0, '@type.builtin.cpp', { fg = colours.primitive_blue })
+
     -- DEBUGGER (DAP) STYLING
-    ---------------------------------------------------------
     -- Define the Highlight Groups
     -- We use the same dark grey background (#31353f) from your previous snippet
     vim.api.nvim_set_hl(0, 'DapBreakpoint', { fg = '#993939', bg = '#31353f' })
