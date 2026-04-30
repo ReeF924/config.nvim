@@ -938,6 +938,7 @@ require('lazy').setup({
   },
 
   { import = 'plugins' },
+  { import = 'plugins/theme' },
 
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
