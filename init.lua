@@ -762,6 +762,8 @@ require('lazy').setup({
         -- You can use 'stop_after_first' to run the first available formatter from the list
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettier' },
+        css = { 'prettier' },
       },
     },
   },
@@ -939,6 +941,7 @@ require('lazy').setup({
 
   { import = 'plugins' },
   { import = 'plugins/theme' },
+  { import = 'plugins/languages' },
 
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
