@@ -7,6 +7,7 @@ local M = {
   literal = '#9FABF4',
   bg_dark = '#2D2D2D',
   dap_bg = '#31353F',
+  dark_green = '#4FBC90',
 }
 
 return M

@@ -17,6 +17,9 @@ return {
       'Statement', -- return, break
       '@keyword.return',
       'Exception',
+      'StorageClass',
+      '@type.qualifier',
+      '@keyword.modifier',
     }
 
     -- Default for these keywords is bold, turn that off
@@ -34,16 +37,27 @@ return {
       ['@method'] = { fg = c.meth },
       ['@function.call'] = { fg = c.meth },
       ['@method.call'] = { fg = c.meth },
+
       ['Operator'] = { fg = c.operator },
       ['@operator'] = { fg = c.operator },
+
+      ['StorageClass'] = { fg = c.primitive_blue },
+      ['@type.qualifier'] = { fg = c.primitive_blue },
+      ['@keyword.modifier'] = { fg = c.primitive_blue },
+
       ['@type'] = { fg = c.type_blue },
       ['Type'] = { fg = c.primitive_blue },
       ['@type.builtin'] = { fg = c.primitive_blue },
+
       ['Constant'] = { fg = c.literal },
+
       ['MatchParen'] = { link = 'Visual' },
+
       ['NeoTreeNormal'] = { bg = c.bg_dark },
       ['NeoTreeNormalNC'] = { bg = c.bg_dark },
+
       ['@variable.member'] = { fg = c.field_purple },
+
       ['Number'] = { link = 'Constant' },
       ['@number'] = { link = 'Constant' },
       ['Boolean'] = { link = 'Constant' },
