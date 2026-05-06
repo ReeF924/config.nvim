@@ -11,8 +11,8 @@ return {
   },
   lazy = false,
   keys = {
-    { '<leader>e', ':Neotree toggle float right<cr>', desc = 'Neo-tree Toggle' },
-    { '<leader>n', ':Neotree focus<CR>', desc = 'Neo-tree Focus' },
+    { '<leader>n', ':Neotree toggle float right<cr>', desc = 'Neo-tree Toggle' },
+    { '<leader>N', ':Neotree focus<CR>', desc = 'Neo-tree Focus' },
   },
   opts = {
     filesystem = {
