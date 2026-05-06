@@ -122,8 +122,6 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 
 -- Map Control+3 to toggle between the last two files (Alternate Buffer)
 vim.keymap.set('n', '<leader>a', '<C-6>', { desc = 'Switch to alternate buffer' })
--- Toggle Neo-tree on the right side as a float
-vim.keymap.set('n', '<C-n>', '<cmd>Neotree toggle float right<cr>', { desc = 'Toggle File Explorer' })
 
 -- Show diagnostics in a floating window
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Diagnostics for curr line' })

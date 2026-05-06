@@ -10,6 +10,10 @@ return {
     'MunifTanjim/nui.nvim',
   },
   lazy = false,
+  keys = {
+    { '<leader>e', ':Neotree toggle float right<cr>', desc = 'Neo-tree Toggle' },
+    { '<leader>n', ':Neotree focus<CR>', desc = 'Neo-tree Focus' },
+  },
   opts = {
     filesystem = {
       filtered_items = {
