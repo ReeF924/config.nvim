@@ -12,20 +12,8 @@ return {
     -- Installs the debug adapters for you
     'mason-org/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
-
-    -- Add your own debuggers here (the specific example for go
-    -- )
-    --'leoluz/nvim-dap-go',
   },
   keys = {
-    -- Basic debugging keymaps, feel free to change to your liking!
-    {
-      '<F5>',
-      function()
-        require('dap').continue()
-      end,
-      desc = 'Debug: Start/Continue',
-    },
     {
       '<F1>',
       function()
@@ -56,6 +44,65 @@ return {
         require('dap').disconnect { terminateDebuggee = true }
       end,
       desc = 'Debug: Stop and Close UI',
+    },
+    {
+      '<F5>',
+      function()
+        local dap = require 'dap'
+        -- If a session is already active, just continue
+        if dap.session() then
+          dap.continue()
+          return
+        end
+
+        -- Otherwise, find and run the "Standard" config automatically
+        local ft = vim.bo.filetype
+        local configs = dap.configurations[ft]
+        if configs then
+          for _, config in ipairs(configs) do
+            if config.name == 'Launch file' then
+              dap.run(config)
+              return
+            end
+          end
+        end
+
+        -- Fallback if specific name isn't found
+        dap.continue()
+      end,
+      desc = 'Debug: Start Standard / Continue',
+    },
+    {
+      '<F6>',
+      function()
+        local dap = require 'dap'
+        -- 1. Ensure configurations are loaded for the current filetype
+        local ft = vim.bo.filetype
+        local configs = dap.configurations[ft]
+
+        if not configs then
+          print('No debug configurations found for ' .. ft)
+          return
+        end
+
+        -- 2. Find the specific config by name
+        local target = nil
+        for _, config in ipairs(configs) do
+          if config.name == 'Launch with Stdin Redirection' then
+            target = config
+            break
+          end
+        end
+
+        -- 3. Run it specifically, or fallback to standard continue if not found
+        if target then
+          dap.run(target)
+        else
+          print 'Stdin config not found! Falling back to standard menu...'
+          dap.continue()
+        end
+      end,
+      desc = 'Debug: Run with Stdin (< file)',
     },
     {
       '<leader>db',
@@ -208,20 +255,9 @@ return {
       },
     }
 
-    -- Change breakpoint icons
-    -- vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
-    -- vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
-    -- local breakpoint_icons = vim.g.have_nerd_font
-    --     and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
-    --   or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
-    -- for type, icon in pairs(breakpoint_icons) do
-    --   local tp = 'Dap' .. type
-    --   local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
-    --   vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
-    -- end
-
     dap.configurations.cpp = {
-      { -- <--- This brace starts the list
+      {
+        -- WARN: if this name is changed, it must be changed in the keys array too
         name = 'Launch file',
         type = 'codelldb',
         request = 'launch',
@@ -238,10 +274,28 @@ return {
             ignoreFailures = false,
           },
         },
-      }, -- <--- This brace ends the first configuration in the list
+      },
+      {
+        -- WARN: if this name is changed, it must be changed in the keys array too
+        name = 'Launch with Stdin Redirection',
+        type = 'codelldb',
+        request = 'launch',
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        stdio = function()
+          local input_file = vim.fn.input('Path to input file: ', vim.fn.getcwd() .. '/', 'file')
+          if input_file ~= '' and input_file ~= vim.fn.getcwd() .. '/' then
+            return { input_file, nil, nil }
+          end
+          return nil
+        end,
+        console = 'integratedTerminal',
+      },
     }
 
-    -- Shared configuration for JS and TS
     local js_config = {
       {
         type = 'pwa-node',

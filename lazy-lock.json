@@ -31,7 +31,7 @@
   "promise-async": { "branch": "main", "commit": "119e8961014c9bfaf1487bf3c2a393d254f337e2" },
   "runner-nvim": { "branch": "main", "commit": "fff7bc209c0c1effa17c326eed3a2a64939ee009" },
   "sqlite.nvim": { "branch": "master", "commit": "a8466c830a89794c2eafa41b41dd11fdf4a0d7ca" },
-  "telescope-fzf-native.nvim": { "branch": "main", "commit": "6fea601bd2b694c6f2ae08a6c6fab14930c60e2c" },
+  "telescope-fzf-native.nvim": { "branch": "main", "commit": "b25b749b9db64d375d782094e2b9dce53ad53a40" },
   "telescope-ui-select.nvim": { "branch": "master", "commit": "6e51d7da30bd139a6950adf2a47fda6df9fa06d2" },
   "telescope.nvim": { "branch": "master", "commit": "f04ab730b8f9c6bf3f54a206d0dcddfd70c52d59" },
   "time-tracker.nvim": { "branch": "master", "commit": "4127c4b5fecaf5f5cb3aa840707e58bb88eb9bf0" },
