@@ -1,0 +1,32 @@
+# ~/.config/nvim/lspConfigs/clangd.yaml
+CompileFlags:
+  Add:
+    - "-Wall"
+    - "-Wextra"
+    - "-pedantic"
+
+Diagnostics:
+  ClangTidy:
+    Add:
+      - "bugprone-*"
+      - "performance-*"
+      - "modernize-*"
+      - "readability-implicit-bool-conversion"
+      - "google-explicit-constructor"
+      - "bugprone-implicit-widening-of-multiplication-result"
+      - "cppcoreguidelines-narrowing-conversions"
+    Remove:
+      - "modernize-use-trailing-return-type"
+      - "modernize-use-auto"
+
+---
+If:
+  PathMatch: .*\.(cpp|hpp|cxx|cc|hh)$
+CompileFlags:
+  Add: ["-xc++", "-std=c++23"]
+
+---
+If:
+  PathMatch: .*\.(c|h)$
+CompileFlags:
+  Add: ["-xc"]

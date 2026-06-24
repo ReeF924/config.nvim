@@ -4,6 +4,9 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+--WARN: get rid of this asap, just for the LSP debug
+vim.lsp.log.set_level 'debug'
+
 vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
@@ -614,28 +617,41 @@ require('lazy').setup({
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+
+      local function clangd_cmd(dispatchers, config)
+        -- search upward from the file actually being opened, same as clangd does
+        local bufname = vim.api.nvim_buf_get_name(0)
+        local start_dir = (bufname ~= '' and vim.fs.dirname(bufname)) or (config and config.root_dir) or vim.fn.getcwd()
+
+        local has_project_config = vim.fs.find('.clangd', { upward = true, path = start_dir })[1] ~= nil
+        vim.notify('clangd_cmd: start_dir=' .. start_dir .. ' has_project_config=' .. tostring(has_project_config))
+
+        local cmd = {
+          'clangd',
+          '--background-index',
+          '--clang-tidy',
+          '--header-insertion=iwyu',
+          '--completion-style=detailed',
+          '--function-arg-placeholders=true',
+          '--fallback-style=llvm',
+        }
+
+        local spawn_opts = {}
+        if not has_project_config then
+          -- no .clangd anywhere up the tree -> point clangd's "user config"
+          -- lookup at our fallback dir instead of the real one
+          spawn_opts.env = {
+            XDG_CONFIG_HOME = vim.fn.stdpath 'config' .. '/lspConfigs/clangd-fallback',
+          }
+        end
+
+        return vim.lsp.rpc.start(cmd, dispatchers, spawn_opts)
+      end
+
       local servers = {
         clangd = {
-          cmd = {
-            'clangd',
-            '--background-index',
-            '--clang-tidy',
-            '--header-insertion=iwyu',
-            '--completion-style=detailed',
-            '--function-arg-placeholders',
-            '--fallback-style=llvm',
-          },
-          init_options = {
-            fallbackFlags = {
-              '-Wall',
-              '-Wextra',
-              '-pedantic',
-              '-Wconversion',
-              '-Wsign-conversion',
-              '-Wfloat-conversion',
-              '-std=c++23',
-            },
-          },
+          cmd = clangd_cmd,
+          init_options = {},
           capabilities = {
             textDocument = {
               foldingRange = {
@@ -701,25 +717,19 @@ require('lazy').setup({
       --
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
-      local ensure_installed = vim.tbl_keys(servers or {})
+      local ensure_installed = vim.tbl_keys(servers)
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+      for server_name, server_opts in pairs(servers) do
+        server_opts.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server_opts.capabilities or {})
+        vim.lsp.config(server_name, server_opts)
+      end
+
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
       }
     end,
   },
