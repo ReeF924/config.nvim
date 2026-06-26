@@ -148,6 +148,7 @@ return {
         -- Update this to ensure that you have the debuggers for the langs you want
         'codelldb',
         'js-debug-adapter',
+        'netcoredbg',
       },
     }
 
@@ -159,6 +160,12 @@ return {
         command = vim.fn.expand '$HOME' .. '/.local/share/nvim/mason/bin/codelldb',
         args = { '--port', '${port}' },
       },
+    }
+
+    dap.adapters.coreclr = {
+      type = 'executable',
+      command = 'netcoredbg',
+      args = { '--interpreter=vscode' },
     }
 
     -- Adapter configuration for Node/JS/TS
@@ -178,6 +185,7 @@ return {
         },
       }
     end
+
     -- Custom function to toggle between Console and Scopes
     local function toggle_console_scopes()
       local wins = vim.api.nvim_tabpage_list_wins(0)
@@ -296,6 +304,18 @@ return {
       },
     }
 
+    dap.configurations.cs = {
+      {
+        type = 'coreclr',
+        name = 'launch - netcoredbg',
+        request = 'launch',
+        program = function()
+          -- Prompts you for the path to the compiled .dll file when you hit debug
+          return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/net8.0/', 'file')
+        end,
+      },
+    }
+
     local js_config = {
       {
         type = 'pwa-node',
@@ -315,7 +335,6 @@ return {
         cwd = '${workspaceFolder}',
       },
     }
-
     -- Apply the config to the relevant filetypes
     dap.configurations.javascript = js_config
     dap.configurations.typescript = js_config

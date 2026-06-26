@@ -85,7 +85,5 @@ return {
     vim.keymap.set('n', '<leader>b0', function()
       move_to_ordinal(10)
     end, { desc = 'Move buffer to pos 10' })
-
-    vim.keymap.set('n', '<leader>x', ':bd<CR>', { desc = 'Close Buffer' })
   end,
 }
