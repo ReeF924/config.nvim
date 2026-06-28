@@ -178,10 +178,19 @@ return {
           },
         },
         roslyn_ls = {
+          handlers = {
+            ['textDocument/diagnostic'] = function(err, result, ctx)
+              if not (ctx.params and ctx.params.identifier) then
+                return -- drop the manual, identifierless refresh from projectInitializationComplete
+              end
+              return vim.lsp.diagnostic.on_diagnostic(err, result, ctx)
+            end,
+          },
           settings = {
             roslyn = {
               enable_analyzers_support = true,
               enable_import_completion = true,
+              updateImportsOnFileMove = { enabled = 'always' },
             },
           },
         },

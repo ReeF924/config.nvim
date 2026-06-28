@@ -164,7 +164,7 @@ return {
 
     dap.adapters.coreclr = {
       type = 'executable',
-      command = 'netcoredbg',
+      command = vim.fn.expand '$HOME' .. '/.local/share/nvim/mason/bin/netcoredbg',
       args = { '--interpreter=vscode' },
     }
 
@@ -222,7 +222,6 @@ return {
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
     dapui.setup {
-
       layouts = {
         {
           elements = {
@@ -304,15 +303,41 @@ return {
       },
     }
 
+    local function dotnet_build_and_get_dll()
+      vim.notify('Running dotnet build...', vim.log.levels.INFO)
+
+      local build = vim.system({ 'dotnet', 'build' }, { text = true, cwd = vim.fn.getcwd() }):wait()
+
+      if build.code ~= 0 then
+        vim.notify('dotnet build failed:\n' .. (build.stderr ~= '' and build.stderr or build.stdout), vim.log.levels.ERROR)
+      else
+        vim.notify('Build succeeded', vim.log.levels.INFO)
+      end
+
+      local dlls = vim.fn.globpath(vim.fn.getcwd(), '**/bin/**/*.dll', false, true)
+      dlls = vim.tbl_filter(function(p)
+        return not p:match '[/\\]obj[/\\]' and not p:match '[/\\]ref[/\\]'
+      end, dlls)
+      table.sort(dlls)
+
+      local default = dlls[1] or (vim.fn.getcwd() .. '/bin/Debug/')
+
+      return vim.fn.input('Path to dll: ', default, 'file')
+    end
+
     dap.configurations.cs = {
       {
+        name = 'Launch file',
         type = 'coreclr',
-        name = 'launch - netcoredbg',
         request = 'launch',
-        program = function()
-          -- Prompts you for the path to the compiled .dll file when you hit debug
-          return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/net8.0/', 'file')
-        end,
+        program = dotnet_build_and_get_dll,
+        cwd = '${workspaceFolder}',
+      },
+      {
+        name = 'Attach to Process',
+        type = 'coreclr',
+        request = 'attach',
+        processId = require('dap.utils').pick_process,
       },
     }
 

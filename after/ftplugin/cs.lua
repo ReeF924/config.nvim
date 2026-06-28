@@ -5,15 +5,18 @@ local cs_hl = {
   ['@field'] = { fg = c.field_purple },
   ['@lsp.type.property.cs'] = { fg = c.field_purple },
   ['@lsp.typemod.property.classScope.cs'] = { fg = c.field_purple },
+  ['@namespace'] = { link = '@parameter' },
 
   -- Define these names exactly
   ['CustomOperatorKeyword'] = { fg = c.operator },
   ['CustomPrimitiveKeyword'] = { fg = c.primitive_blue },
   ['CustomAccessKeyword'] = { fg = c.blue_gray },
+  ['CustomStaticKeyword'] = { fg = c.blue_gray },
   ['CustomThisKeyword'] = { fg = c.field_purple },
   ['CustomAsyncKeyword'] = { fg = c.dark_green },
   ['CustomClassKeyword'] = { fg = c.dark_green },
   ['CustomLiteralKeyword'] = { fg = c.literal },
+  ['CustomPolymorhismKeyword'] = { fg = c.dark_green },
 }
 
 -- Set highlights
@@ -49,10 +52,13 @@ local keyword_map = {
   ['await'] = 'CustomOperatorKeyword',
   ['public'] = 'CustomAccessKeyword',
   ['private'] = 'CustomAccessKeyword',
+  ['static'] = 'CustomStaticKeyword',
   ['this'] = 'CustomThisKeyword',
   ['async'] = 'CustomAsyncKeyword',
   ['class'] = 'CustomClassKeyword',
   ['null'] = 'CustomLiteralKeyword',
+  ['abstract'] = 'CustomPolymorhismKeyword',
+  ['override'] = 'CustomPolymorhismKeyword',
 }
 
 -- Apply matches
