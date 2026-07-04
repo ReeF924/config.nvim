@@ -2,9 +2,10 @@ local c = require 'core.pallete'
 
 local cs_hl = {
   ['@lsp.type.extensionMethod.cs'] = { link = '@function' },
-  ['@field'] = { fg = c.field_purple },
   ['@lsp.type.property.cs'] = { fg = c.field_purple },
+  ['@lsp.type.field.cs'] = { fg = c.field_purple },
   ['@lsp.typemod.property.classScope.cs'] = { fg = c.field_purple },
+
   ['@namespace'] = { link = '@parameter' },
 
   -- Define these names exactly
@@ -12,6 +13,7 @@ local cs_hl = {
   ['CustomPrimitiveKeyword'] = { fg = c.primitive_blue },
   ['CustomAccessKeyword'] = { fg = c.blue_gray },
   ['CustomStaticKeyword'] = { fg = c.blue_gray },
+  ['CustomModifierKeyword'] = { fg = c.blue_gray },
   ['CustomThisKeyword'] = { fg = c.field_purple },
   ['CustomAsyncKeyword'] = { fg = c.dark_green },
   ['CustomClassKeyword'] = { fg = c.dark_green },
@@ -53,9 +55,12 @@ local keyword_map = {
   ['public'] = 'CustomAccessKeyword',
   ['private'] = 'CustomAccessKeyword',
   ['static'] = 'CustomStaticKeyword',
+  ['readonly'] = 'CustomModifierKeyword',
+  ['const'] = 'CustomModifierKeyword',
   ['this'] = 'CustomThisKeyword',
   ['async'] = 'CustomAsyncKeyword',
   ['class'] = 'CustomClassKeyword',
+  ['interface'] = 'CustomClassKeyword',
   ['null'] = 'CustomLiteralKeyword',
   ['abstract'] = 'CustomPolymorhismKeyword',
   ['override'] = 'CustomPolymorhismKeyword',
@@ -66,3 +71,6 @@ pcall(vim.fn.clearmatches)
 for word, group in pairs(keyword_map) do
   vim.fn.matchadd(group, '\\<' .. word .. '\\>', 1000)
 end
+
+_G.ufo_keywords = _G.ufo_keywords or {}
+_G.ufo_keywords.cs = keyword_map

@@ -32,14 +32,25 @@ return {
         local sufWidth = vim.fn.strdisplaywidth(suffix)
         local targetWidth = width - sufWidth
         local curWidth = 0
+
+        -- Dynamic lookup for language-specific keywords registered globally
+        local ft = vim.bo.filetype
+        local ft_keywords = _G.ufo_keywords and _G.ufo_keywords[ft]
+
         for _, chunk in ipairs(virtText) do
           local chunkText = chunk[1]
+          local hlGroup = chunk[2]
+
+          -- Swap default group for your custom one if a match is found
+          if ft_keywords and ft_keywords[chunkText] then
+            hlGroup = ft_keywords[chunkText]
+          end
+
           local chunkWidth = vim.fn.strdisplaywidth(chunkText)
           if targetWidth > curWidth + chunkWidth then
-            table.insert(newVirtText, chunk)
+            table.insert(newVirtText, { chunkText, hlGroup })
           else
             chunkText = truncate(chunkText, targetWidth - curWidth)
-            local hlGroup = chunk[2]
             table.insert(newVirtText, { chunkText, hlGroup })
             chunkWidth = vim.fn.strdisplaywidth(chunkText)
             if curWidth + chunkWidth < targetWidth then
