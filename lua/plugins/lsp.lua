@@ -178,15 +178,11 @@ return {
           },
         },
         roslyn_ls = {
-          init_options = {
-            enableWorkspacePullDiagnostics = true,
-          },
           settings = {
             roslyn = {
               enable_analyzers_support = true,
               enable_import_completion = true,
               updateImportsOnFileMove = { enabled = 'always' },
-              enable_workspace_pull_diagnostics = true,
             },
           },
         },
@@ -222,19 +218,6 @@ return {
         server_opts.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server_opts.capabilities or {})
         vim.lsp.config(server_name, server_opts)
       end
-
-      -- Force diagnostics refresh on save for C# files
-      vim.api.nvim_create_autocmd('BufWritePost', {
-        pattern = '*.cs',
-        callback = function()
-          vim.diagnostic.enable(true, { bufnr = 0 })
-          vim.lsp.buf_request(0, 'textDocument/diagnostic', nil, function(err, result, ctx)
-            if result then
-              vim.diagnostic.set(ctx.client, 0, result.items)
-            end
-          end)
-        end,
-      })
 
       -- Initialize the Mason-LSPConfig bridge
       require('mason-lspconfig').setup {
