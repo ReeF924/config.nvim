@@ -9,13 +9,31 @@ return {
     'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
     'MunifTanjim/nui.nvim',
   },
-  lazy = false,
+  cmd = { 'Neotree', 'NeotreeToggle', 'NeotreeFocus', 'NeotreeReveal', 'NeotreeOpen' },
   keys = {
     { '<leader>n', ':Neotree toggle float right<cr>', desc = 'Neo-tree Toggle' },
     { '<leader>N', ':Neotree focus<CR>', desc = 'Neo-tree Focus' },
   },
   opts = {
+    auto_clean_after_session_restore = false,
+    close_if_last_window = true,
+    enable_diagnostics = true,
+    enable_git_status = true,
+    enable_normal_mode_for_inputs = false,
+    use_popups_for_input = false,
+    open_files_do_not_replace_types = { 'terminal', 'trouble', 'qf' },
+    buffers = {
+      bind_to_cwd = false,
+    },
+    default_component_configs = {
+      indent = {
+        indent_size = 2,
+        padding = 1,
+        indent_guides_hi = 'NeoTreeIndentMarker',
+      },
+    },
     filesystem = {
+      auto_open = false,
       filtered_items = {
         visible = true,
         hide_dotfiles = false,

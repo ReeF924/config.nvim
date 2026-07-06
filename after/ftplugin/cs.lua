@@ -18,7 +18,8 @@ local cs_hl = {
   ['CustomAsyncKeyword'] = { fg = c.dark_green },
   ['CustomClassKeyword'] = { fg = c.dark_green },
   ['CustomLiteralKeyword'] = { fg = c.literal },
-  ['CustomPolymorhismKeyword'] = { fg = c.dark_green },
+  ['CustomPolymorhismKeyword'] = { fg = c.lime_green },
+  ['CustomGetSetKeyword'] = { link = '@function' },
 }
 
 -- Set highlights
@@ -53,17 +54,22 @@ local keyword_map = {
   ['false'] = 'CustomLiteralKeyword',
   ['await'] = 'CustomOperatorKeyword',
   ['public'] = 'CustomAccessKeyword',
+  ['protected'] = 'CustomAccessKeyword',
   ['private'] = 'CustomAccessKeyword',
   ['static'] = 'CustomStaticKeyword',
   ['readonly'] = 'CustomModifierKeyword',
+  ['required'] = 'CustomModifierKeyword',
   ['const'] = 'CustomModifierKeyword',
   ['this'] = 'CustomThisKeyword',
+  ['base'] = 'CustomThisKeyword',
   ['async'] = 'CustomAsyncKeyword',
   ['class'] = 'CustomClassKeyword',
   ['interface'] = 'CustomClassKeyword',
   ['null'] = 'CustomLiteralKeyword',
   ['abstract'] = 'CustomPolymorhismKeyword',
   ['override'] = 'CustomPolymorhismKeyword',
+  ['get'] = 'CustomGetSetKeyword',
+  ['set'] = 'CustomGetSetKeyword',
 }
 
 -- Apply matches

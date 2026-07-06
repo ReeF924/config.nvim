@@ -3,6 +3,7 @@ local P = {
   operator = '#DC88DA',
   type_blue = '#60C9E1',
   primitive_blue = '#A1EDFC',
+  dark_blue = '#3a87fc',
   dark_blue_gray = '#82a19C',
   blue_gray = '#93BAB4',
   field_purple = '#E2BBF7',
