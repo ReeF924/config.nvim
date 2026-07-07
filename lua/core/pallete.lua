@@ -1,5 +1,6 @@
 local P = {
-  meth = '#F1D164',
+  adwaita_white = '#DEDDDA',
+  method_yellow = '#F1D164',
   operator = '#DC88DA',
   type_blue = '#60C9E1',
   primitive_blue = '#A1EDFC',

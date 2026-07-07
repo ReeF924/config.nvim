@@ -7,7 +7,7 @@ return {
 
     local c = require 'core.pallete'
     --By default keywords are bold, undo that
-    local keyword_groups = {
+    local unbold_groups = {
       'Keyword',
       '@keyword',
       'Conditional', -- if, else
@@ -23,7 +23,7 @@ return {
     }
 
     -- Default for these keywords is bold, turn that off
-    for _, group in ipairs(keyword_groups) do
+    for _, group in ipairs(unbold_groups) do
       local current_hl = vim.api.nvim_get_hl(0, { name = group, link = false })
       vim.api.nvim_set_hl(0, group, {
         fg = current_hl.fg,
@@ -33,10 +33,10 @@ return {
     end
 
     local global_hl = {
-      ['@function'] = { fg = c.meth },
-      ['@method'] = { fg = c.meth },
-      ['@function.call'] = { fg = c.meth },
-      ['@method.call'] = { fg = c.meth },
+      ['@function'] = { fg = c.method_yellow },
+      ['@method'] = { fg = c.method_yellow },
+      ['@function.call'] = { fg = c.method_yellow },
+      ['@method.call'] = { fg = c.method_yellow },
 
       ['Operator'] = { fg = c.operator },
       ['@operator'] = { fg = c.operator },
