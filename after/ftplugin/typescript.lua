@@ -16,6 +16,8 @@ local ts_hl = {
   ['@lsp.typemod.property.declaration.typescript'] = { fg = c.field_purple },
   ['@lsp.typemod.parameter.declaration.typescript'] = { fg = c.adwaita_white },
   ['@lsp.mod.local.typescript'] = { fg = c.adwaita_white },
+  ['typescriptFuncCallArg'] = { fg = c.adwaita_white },
+  ['typescriptFuncComma'] = { fg = c.adwaita_white },
 
   ['@lsp.type.modifier.typescript'] = { fg = c.blue_gray },
 
@@ -54,10 +56,57 @@ for group, opts in pairs(ts_hl) do
 end
 
 local keyword_map = {
+  -- Primitives & Types
+  ['string'] = 'CustomPrimitiveKeyword',
+  ['number'] = 'CustomPrimitiveKeyword',
+  ['boolean'] = 'CustomPrimitiveKeyword',
+  ['any'] = 'CustomPrimitiveKeyword',
+  ['void'] = 'CustomPrimitiveKeyword',
+  ['never'] = 'CustomPrimitiveKeyword',
+  ['unknown'] = 'CustomPrimitiveKeyword',
+  ['bigint'] = 'CustomPrimitiveKeyword',
+  ['symbol'] = 'CustomPrimitiveKeyword',
+  ['null'] = 'CustomLiteralKeyword',
+  ['undefined'] = 'CustomPrimitiveKeyword',
+
+  -- Literals
+  ['true'] = 'CustomLiteralKeyword',
+  ['false'] = 'CustomLiteralKeyword',
+
+  -- Operators
+  ['new'] = 'CustomOperatorKeyword',
+  ['instanceof'] = 'CustomOperatorKeyword',
+  ['typeof'] = 'CustomOperatorKeyword',
+  ['as'] = 'CustomOperatorKeyword',
+  ['is'] = 'CustomOperatorKeyword',
+  ['in'] = 'CustomOperatorKeyword',
+  ['of'] = 'CustomOperatorKeyword',
+
   -- Access modifiers
   ['public'] = 'CustomAccessKeyword',
   ['private'] = 'CustomAccessKeyword',
   ['protected'] = 'CustomAccessKeyword',
+
+  -- Modifiers
+  ['static'] = 'CustomStaticKeyword',
+  ['readonly'] = 'CustomModifierKeyword',
+  ['const'] = 'CustomModifierKeyword',
+  ['let'] = 'CustomModifierKeyword',
+  ['var'] = 'CustomModifierKeyword',
+  ['export'] = 'CustomModifierKeyword',
+  ['import'] = 'CustomModifierKeyword',
+  ['from'] = 'CustomModifierKeyword',
+  ['default'] = 'CustomModifierKeyword',
+  ['abstract'] = 'CustomPolymorhismKeyword',
+
+  -- This/Super
+  ['this'] = 'CustomThisKeyword',
+  ['super'] = 'CustomThisKeyword',
+
+  -- Async
+  ['async'] = 'CustomAsyncKeyword',
+  ['await'] = 'CustomOperatorKeyword',
+  ['yield'] = 'CustomOperatorKeyword',
 
   -- Class/Type declarations
   ['class'] = 'CustomClassKeyword',
@@ -67,20 +116,23 @@ local keyword_map = {
   ['namespace'] = 'CustomClassKeyword',
   ['module'] = 'CustomClassKeyword',
 
-  -- Modifiers
-  ['static'] = 'CustomStaticKeyword',
-  ['readonly'] = 'CustomModifierKeyword',
-  ['const'] = 'CustomModifierKeyword',
-  ['let'] = 'CustomModifierKeyword',
-  ['var'] = 'CustomModifierKeyword',
-  ['export'] = 'CustomModifierKeyword',
-  ['default'] = 'CustomModifierKeyword',
-  ['abstract'] = 'CustomPolymorhismKeyword',
+  -- Control flow
+  ['if'] = 'CustomOperatorKeyword',
+  ['else'] = 'CustomOperatorKeyword',
+  ['switch'] = 'CustomOperatorKeyword',
+  ['case'] = 'CustomOperatorKeyword',
+  ['break'] = 'CustomOperatorKeyword',
+  ['continue'] = 'CustomOperatorKeyword',
+  ['return'] = 'CustomOperatorKeyword',
+  ['throw'] = 'CustomOperatorKeyword',
+  ['try'] = 'CustomOperatorKeyword',
+  ['catch'] = 'CustomOperatorKeyword',
+  ['finally'] = 'CustomOperatorKeyword',
 
-  -- Async
-  ['async'] = 'CustomAsyncKeyword',
-  ['await'] = 'CustomOperatorKeyword',
-  ['yield'] = 'CustomOperatorKeyword',
+  -- Loops
+  ['for'] = 'CustomOperatorKeyword',
+  ['while'] = 'CustomOperatorKeyword',
+  ['do'] = 'CustomOperatorKeyword',
 
   -- Polymorphism
   ['extends'] = 'CustomPolymorhismKeyword',
@@ -89,6 +141,14 @@ local keyword_map = {
   -- Get/Set accessors
   ['get'] = 'CustomGetSetKeyword',
   ['set'] = 'CustomGetSetKeyword',
+
+  -- Other
+  ['function'] = 'CustomClassKeyword',
+  ['arrow'] = 'CustomOperatorKeyword',
+  ['infer'] = 'CustomOperatorKeyword',
+  ['keyof'] = 'CustomOperatorKeyword',
+  ['unique'] = 'CustomModifierKeyword',
+  ['optional'] = 'CustomModifierKeyword',
 }
 
 pcall(vim.fn.clearmatches)
