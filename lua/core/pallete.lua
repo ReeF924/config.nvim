@@ -1,5 +1,6 @@
 local P = {
   adwaita_white = '#DEDDDA',
+  adwaita_orange = '#F99B11',
   method_yellow = '#F1D164',
   operator = '#DC88DA',
   type_blue = '#60C9E1',
