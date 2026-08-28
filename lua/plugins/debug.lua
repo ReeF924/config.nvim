@@ -55,12 +55,12 @@ return {
           return
         end
 
-        -- Otherwise, find and run the "Standard" config automatically
+        -- Otherwise, find and run the Development config automatically
         local ft = vim.bo.filetype
         local configs = dap.configurations[ft]
         if configs then
           for _, config in ipairs(configs) do
-            if config.name == 'Launch file' then
+            if config.name == 'Launch TypeScript File (Development)' then
               dap.run(config)
               return
             end
@@ -70,7 +70,7 @@ return {
         -- Fallback if specific name isn't found
         dap.continue()
       end,
-      desc = 'Debug: Start Standard / Continue',
+      desc = 'Debug: Start Development / Continue',
     },
     {
       '<F6>',
@@ -88,7 +88,7 @@ return {
         -- 2. Find the specific config by name
         local target = nil
         for _, config in ipairs(configs) do
-          if config.name == 'Launch with Stdin Redirection' then
+          if config.name == 'Launch TypeScript File (Production)' then
             target = config
             break
           end
@@ -98,11 +98,11 @@ return {
         if target then
           dap.run(target)
         else
-          print 'Stdin config not found! Falling back to standard menu...'
+          print 'Production config not found! Falling back to standard menu...'
           dap.continue()
         end
       end,
-      desc = 'Debug: Run with Stdin (< file)',
+      desc = 'Debug: Run Production (NODE_ENV=production)',
     },
     {
       '<leader>db',
@@ -348,7 +348,7 @@ return {
         name = 'Launch Current File (Node.js)',
         program = '${file}',
         cwd = '${workspaceFolder}',
-        sourceMaps = true, -- Crucial for TypeScript!
+        sourceMaps = true,
         protocol = 'inspector',
         console = 'integratedTerminal',
       },
@@ -360,13 +360,77 @@ return {
         cwd = '${workspaceFolder}',
       },
     }
+
+    local ts_config = {
+      {
+        type = 'pwa-node',
+        request = 'launch',
+        name = 'Launch TypeScript File (Development)',
+        runtimeExecutable = 'ts-node',
+        program = '${file}',
+        cwd = '${workspaceFolder}',
+        sourceMaps = true,
+        protocol = 'inspector',
+        console = 'integratedTerminal',
+        runtimeArgs = {
+          '--compiler-options',
+          '{"sourceMap":true}',
+        },
+        env = {
+          NODE_ENV = 'development',
+        },
+      },
+      {
+        type = 'pwa-node',
+        request = 'launch',
+        name = 'Launch TypeScript File (Production)',
+        runtimeExecutable = 'ts-node',
+        program = '${file}',
+        cwd = '${workspaceFolder}',
+        sourceMaps = true,
+        protocol = 'inspector',
+        console = 'integratedTerminal',
+        runtimeArgs = {
+          '--compiler-options',
+          '{"sourceMap":true}',
+        },
+        env = {
+          NODE_ENV = 'production',
+        },
+      },
+      {
+        type = 'pwa-node',
+        request = 'attach',
+        name = 'Attach to Process',
+        processId = require('dap.utils').pick_process,
+        cwd = '${workspaceFolder}',
+      },
+    }
+
     -- Apply the config to the relevant filetypes
     dap.configurations.javascript = js_config
-    dap.configurations.typescript = js_config
+    dap.configurations.typescript = ts_config
 
     -- Support C and Rust too since they use the same debugger
     dap.configurations.c = dap.configurations.cpp
     dap.configurations.rust = dap.configurations.cpp
+
+    -- Define DAP highlight groups first
+    vim.api.nvim_set_hl(0, 'DapBreakpoint', { fg = '#993939', bg = '#31353f' })
+    vim.api.nvim_set_hl(0, 'DapLogPoint', { fg = '#61afef', bg = '#31353f' })
+    vim.api.nvim_set_hl(0, 'DapStopped', { fg = '#98c379', bg = '#31353f', bold = true })
+
+    -- Define DAP breakpoint signs
+    vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'DapBreakpoint', linehl = '', numhl = 'DapBreakpoint' })
+    vim.fn.sign_define('DapBreakpointCondition', { text = '', texthl = 'DapBreakpoint', linehl = '', numhl = 'DapBreakpoint' })
+    vim.fn.sign_define('DapBreakpointRejected', { text = '', texthl = 'DapBreakpoint', linehl = '', numhl = 'DapBreakpoint' })
+    vim.fn.sign_define('DapLogPoint', { text = '', texthl = 'DapLogPoint', linehl = '', numhl = 'DapLogPoint' })
+    vim.fn.sign_define('DapStopped', {
+      text = '',
+      texthl = 'DapStopped',
+      linehl = 'DapStopped',
+      numhl = 'DapStopped',
+    })
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
