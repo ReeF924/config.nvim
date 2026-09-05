@@ -149,6 +149,7 @@ return {
         'codelldb',
         'js-debug-adapter',
         'netcoredbg',
+        'debugpy',
       },
     }
 
@@ -185,6 +186,13 @@ return {
         },
       }
     end
+
+    -- Python debug adapter
+    dap.adapters.debugpy = {
+      type = 'executable',
+      command = vim.fn.expand '$HOME' .. '/.local/share/nvim/mason/packages/debugpy/venv/bin/python',
+      args = { '-m', 'debugpy.adapter' },
+    }
 
     -- Custom function to toggle between Console and Scopes
     local function toggle_console_scopes()
@@ -414,6 +422,42 @@ return {
     -- Support C and Rust too since they use the same debugger
     dap.configurations.c = dap.configurations.cpp
     dap.configurations.rust = dap.configurations.cpp
+
+    -- Python debug configurations
+    dap.configurations.python = {
+      {
+        type = 'debugpy',
+        request = 'launch',
+        name = 'Launch File',
+        program = '${file}',
+        cwd = '${workspaceFolder}',
+        console = 'integratedTerminal',
+        justMyCode = false,
+      },
+      {
+        type = 'debugpy',
+        request = 'attach',
+        name = 'Attach to Process',
+        processId = require('dap.utils').pick_process,
+        cwd = '${workspaceFolder}',
+      },
+      {
+        type = 'debugpy',
+        request = 'launch',
+        name = 'Launch with Arguments',
+        program = '${file}',
+        cwd = '${workspaceFolder}',
+        console = 'integratedTerminal',
+        justMyCode = false,
+        args = function()
+          local args_str = vim.fn.input 'Enter arguments (space separated): '
+          if args_str and args_str ~= '' then
+            return vim.split(args_str, ' ')
+          end
+          return {}
+        end,
+      },
+    }
 
     -- Define DAP highlight groups first
     vim.api.nvim_set_hl(0, 'DapBreakpoint', { fg = '#993939', bg = '#31353f' })

@@ -443,8 +443,8 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua', 'prettierd', 'csharpier', 'eslint_d' },
+        python = { 'black', 'isort', stop_after_first = false },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
@@ -458,6 +458,7 @@ require('lazy').setup({
   -- Import all files from lua/plugins
   { import = 'plugins' },
   { import = 'plugins.languages.cs' },
+  { import = 'plugins.languages.python' },
 
   { -- Autocompletion
     'saghen/blink.cmp',
@@ -567,7 +568,7 @@ require('lazy').setup({
     build = ':TSUpdate',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'cpp', 'c_sharp', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'cpp', 'c_sharp', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {

@@ -201,6 +201,24 @@ return {
             end
           end,
         },
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                typeCheckingMode = 'basic',
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+                diagnosticMode = 'workspace',
+              },
+              inlayHints = {
+                callArgumentNames = 'partial',
+                functionReturnTypes = true,
+                variableTypes = true,
+                parameterNames = 'partial',
+              },
+            },
+          },
+        },
       }
 
       -- Combine LSPs from above with all your extra non-LSP tools
@@ -211,15 +229,22 @@ return {
         'clang-format',
         'stylua',
         'csharpier',
+        'black',
+        'isort',
 
         -- Linters
         'markdownlint',
+        'ruff',
 
         -- DAPs
         'codelldb',
         'js-debug-adapter',
         'netcoredbg',
         'roslyn-language-server',
+        'debugpy',
+
+        -- Python LSP
+        'pyright',
       })
 
       -- Initialize Tool Installer
