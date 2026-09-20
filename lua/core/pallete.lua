@@ -13,8 +13,9 @@ local P = {
   literal = '#9FABF4',
   bg_dark = '#2D2D2D',
   dap_bg = '#31353F',
-  dark_green = '#4FBC90',
   lime_green = '#AFCF4A',
+  green = '#59F989',
+  dark_green = '#4FBC90',
 }
 
 return P

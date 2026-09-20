@@ -1,6 +1,5 @@
 return {
-  -- nvim-foldsign: Visual indicators in the gutter
-  {
+ {
     'yaocccc/nvim-foldsign',
     event = 'CursorHold',
     config = function()

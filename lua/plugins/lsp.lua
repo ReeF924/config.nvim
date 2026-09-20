@@ -177,30 +177,33 @@ return {
             },
           },
         },
-        roslyn_ls = {
-          on_attach = function(client, bufnr)
-            local last_diag_time = {}
-            local debounce_ms = 100
-            
-            client.handlers['textDocument/publishDiagnostics'] = function(err, result, ctx)
-              if err then
-                return
-              end
-              local buf = ctx.bufnr ~= 0 and ctx.bufnr or vim.api.nvim_get_current_buf()
-              local now = vim.loop.now()
-              local last_time = last_diag_time[buf] or 0
-              
-              if now - last_time < debounce_ms then
-                return
-              end
-              last_diag_time[buf] = now
-              
-              vim.schedule(function()
-                vim.diagnostic.set(client, buf, result.diagnostics or {})
-              end)
-            end
-          end,
-        },
+roslyn_ls = {
+           on_attach = function(client, bufnr)
+             -- Disable semantic tokens for C# to let Treesitter highlights take precedence
+             client.server_capabilities.semanticTokensProvider = nil
+
+             local last_diag_time = {}
+             local debounce_ms = 100
+             
+             client.handlers['textDocument/publishDiagnostics'] = function(err, result, ctx)
+               if err then
+                 return
+               end
+               local buf = ctx.bufnr ~= 0 and ctx.bufnr or vim.api.nvim_get_current_buf()
+               local now = vim.loop.now()
+               local last_time = last_diag_time[buf] or 0
+               
+               if now - last_time < debounce_ms then
+                 return
+               end
+               last_diag_time[buf] = now
+               
+               vim.schedule(function()
+                 vim.diagnostic.set(client, buf, result.diagnostics or {})
+               end)
+             end
+           end,
+         },
         pyright = {
           settings = {
             python = {
