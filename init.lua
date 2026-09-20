@@ -136,6 +136,22 @@ vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = '[C]ode [A]c
 vim.diagnostic.config {
   float = { focusable = true, border = 'rounded' },
 }
+
+-- Make >> work on empty lines by inserting indentation
+vim.keymap.set('n', '>>', function()
+  local line = vim.api.nvim_get_current_line()
+  if line:match '^%s*$' then
+    local indent = string.rep(' ', vim.o.shiftwidth)
+    vim.api.nvim_set_current_line(indent)
+    vim.api.nvim_win_set_cursor(0, { vim.api.nvim_win_get_cursor(0)[1], vim.o.shiftwidth })
+  else
+    vim.cmd.normal '>>'
+  end
+end, { desc = 'Indent line (including empty lines)' })
+
+-- Insert literal tab in insert mode with Ctrl+L
+vim.keymap.set('i', '<C-l>', '<C-v><Tab>', { desc = 'Insert literal tab' })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -458,7 +474,6 @@ require('lazy').setup({
   -- Import all files from lua/plugins
   { import = 'plugins' },
   { import = 'plugins.languages.cs' },
-  { import = 'plugins.languages.python' },
 
   { -- Autocompletion
     'saghen/blink.cmp',

@@ -5,8 +5,6 @@ local python_hl = {
   ['Function'] = { fg = c.method_yellow },
   ['Statement'] = { fg = c.method_yellow },
 
-
-
   -- LSP Semantic Tokens
   ['@lsp.type.function.python'] = { fg = c.method_yellow },
   ['@lsp.type.method.python'] = { fg = c.method_yellow },
