@@ -13,6 +13,7 @@ local python_hl = {
   ['@module'] = { fg = c.adwaita_white },
   ['@namespace'] = { fg = c.adwaita_white },
   ['@decorator'] = { fg = c.method_yellow },
+  ['@attribute.builtin.python'] = { link = '@attribute' },
 
 
   ['@function.builtin.python'] = { fg = c.method_yellow },
