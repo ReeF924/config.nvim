@@ -211,7 +211,7 @@ roslyn_ls = {
                 typeCheckingMode = 'basic',
                 autoSearchPaths = true,
                 useLibraryCodeForTypes = true,
-                diagnosticMode = 'workspace',
+                diagnosticMode = 'openDocuments',
               },
               inlayHints = {
                 callArgumentNames = 'partial',
