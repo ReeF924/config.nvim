@@ -243,8 +243,9 @@ return {
         },
         {
           elements = {
-            { id = 'scopes', size = 0.75 },
+            { id = 'scopes', size = 0.5 },
             { id = 'watches', size = 0.25 },
+            { id = 'output', size = 0.25 },
           },
           size = 16,
           position = 'bottom',
@@ -431,7 +432,6 @@ return {
         name = 'Launch File',
         program = '${file}',
         cwd = '${workspaceFolder}',
-        console = 'integratedTerminal',
         justMyCode = false,
       },
       {
@@ -447,7 +447,6 @@ return {
         name = 'Launch with Arguments',
         program = '${file}',
         cwd = '${workspaceFolder}',
-        console = 'integratedTerminal',
         justMyCode = false,
         args = function()
           local args_str = vim.fn.input 'Enter arguments (space separated): '
