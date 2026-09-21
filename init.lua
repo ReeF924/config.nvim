@@ -100,6 +100,14 @@ vim.api.nvim_create_autocmd('BufEnter', {
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Remap n/N, q/Q, `/~ in a circular shift
+vim.keymap.set({ 'n', 'o' }, 'n', '`')
+vim.keymap.set({ 'n', 'o' }, 'N', '~')
+vim.keymap.set({ 'n', 'o' }, 'q', 'n')
+vim.keymap.set({ 'n', 'o' }, 'Q', 'N')
+vim.keymap.set({ 'n', 'o' }, '`', 'q')
+vim.keymap.set({ 'n', 'o' }, '~', 'Q')
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
