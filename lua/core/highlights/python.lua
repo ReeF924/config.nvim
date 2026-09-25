@@ -15,15 +15,12 @@ local python_hl = {
   ['@decorator'] = { fg = c.method_yellow },
   ['@attribute.builtin.python'] = { link = '@attribute' },
 
-
   ['@function.builtin.python'] = { fg = c.method_yellow },
   ['@keyword.operator.python'] = { fg = c.operator },
 
   ['@keyword.function.python'] = { fg = c.dark_blue_gray },
-
+  ['@keyword.type.python'] = { fg = c.dark_green },
   ['@keyword.coroutine.python'] = { fg = c.dark_blue_gray },
-
-
 }
 
 return python_hl
