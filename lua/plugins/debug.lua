@@ -458,6 +458,8 @@ return {
       },
     }
 
+-- Scala DAP configuration omitted: install scala-debug-adapter manually and add adapter config if needed
+
     -- Define DAP highlight groups first
     vim.api.nvim_set_hl(0, 'DapBreakpoint', { fg = '#993939', bg = '#31353f' })
     vim.api.nvim_set_hl(0, 'DapLogPoint', { fg = '#61afef', bg = '#31353f' })

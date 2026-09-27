@@ -246,7 +246,8 @@ roslyn_ls = {
         'roslyn-language-server',
         'debugpy',
 
-        -- Python LSP
+
+        -- LSPs
         'pyright',
       })
 
@@ -266,6 +267,11 @@ roslyn_ls = {
       require('mason-lspconfig').setup {
         ensure_installed = {},
       }
+
+      -- Configure Metals separately (not installed via Mason)
+      vim.lsp.config('metals', {
+        capabilities = capabilities,
+      })
     end,
   },
 }

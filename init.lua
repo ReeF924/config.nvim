@@ -468,6 +468,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua', 'prettierd', 'csharpier', 'eslint_d' },
         python = { 'black', 'isort', stop_after_first = false },
+        scala = { 'scalafmt' },
         -- Conform can also run multiple formatters sequentially
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
@@ -581,6 +582,9 @@ require('lazy').setup({
       signature = { enabled = true },
     },
   },
+
+  -- Scala LSP via nvim-metals
+  { 'scalameta/nvim-metals', ft = { 'scala', 'sbt' }, config = function() end },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
