@@ -64,6 +64,14 @@ return {
         return newVirtText
       end
 
+      -- Try LSP folds, fall back to indent when no folding-capable client exists
+      local function getFoldRanges(bufnr)
+        local ufo = require('ufo')
+        return ufo.getFolds(bufnr, 'lsp'):catch(function()
+          return ufo.getFolds(bufnr, 'indent')
+        end)
+      end
+
       -- Using ufo with LSP
       require('ufo').setup {
         fold_virt_text_handler = handler,
@@ -110,7 +118,7 @@ return {
           get_methods(result)
 
           -- Match the LSP method lines to UFO folds and close them
-          require('ufo').getFolds(bufnr, 'lsp'):thenCall(function(ranges)
+          getFoldRanges(bufnr):thenCall(function(ranges)
             if not ranges then
               return
             end
@@ -131,11 +139,10 @@ return {
 
       -- Fold INNER blocks >= 10 lines (Current block stays OPEN)
       vim.keymap.set('n', 'zn', function() -- 'zn' for 'Inner' or 'Next' level
-        local ufo = require 'ufo'
         local bufnr = vim.api.nvim_get_current_buf()
         local cursor_line = vim.api.nvim_win_get_cursor(0)[1] - 1
 
-        ufo.getFolds(bufnr, 'lsp'):thenCall(function(ranges)
+        getFoldRanges(bufnr):thenCall(function(ranges)
           if not ranges then
             return
           end
@@ -179,16 +186,15 @@ return {
 
       -- Fold blocks >= 10 lines ONLY in the CURRENT block (where your cursor is)
       vim.keymap.set('n', 'zN', function()
-        local ufo = require 'ufo'
         local bufnr = vim.api.nvim_get_current_buf()
         local cursor_line = vim.api.nvim_win_get_cursor(0)[1] - 1
 
-        ufo.getFolds(bufnr, 'lsp'):thenCall(function(ranges)
+        getFoldRanges(bufnr):thenCall(function(ranges)
           if not ranges then
             return
           end
 
-          -- Find the tightest fold block that currently contains your cursor
+          -- Find the block the cursor is currently inside
           local current_block = nil
           local min_size = math.huge
           for _, range in ipairs(ranges) do
@@ -229,7 +235,7 @@ return {
         ufo.openAllFolds() -- Reset state
         local bufnr = vim.api.nvim_get_current_buf()
 
-        ufo.getFolds(bufnr, 'lsp'):thenCall(function(ranges)
+        getFoldRanges(bufnr):thenCall(function(ranges)
           if not ranges then
             return
           end
@@ -250,11 +256,10 @@ return {
 
       -- Undo for zr/zn: Recursively OPEN all folds in the current block
       vim.keymap.set('n', 'zx', function()
-        local ufo = require 'ufo'
         local bufnr = vim.api.nvim_get_current_buf()
         local cursor_line = vim.api.nvim_win_get_cursor(0)[1] - 1
 
-        ufo.getFolds(bufnr, 'lsp'):thenCall(function(ranges)
+        getFoldRanges(bufnr):thenCall(function(ranges)
           if not ranges then
             return
           end
