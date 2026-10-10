@@ -205,6 +205,10 @@ roslyn_ls = {
            end,
          },
         pyright = {
+           on_attach = function(client, bufnr)
+             -- Disable pyright diagnostics to avoid duplicate messages from ruff
+             client.handlers['textDocument/publishDiagnostics'] = function() end
+           end,
           settings = {
             python = {
               analysis = {
