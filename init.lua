@@ -84,10 +84,22 @@ vim.opt.foldlevel = 99
 
 -- Disable automatic comment insertion on new lines
 vim.api.nvim_create_autocmd('BufEnter', {
+  -- Close any [No Name] buffers when a real file is opened, but keep those shown in a window (e.g., Telescope preview)
   callback = function()
-    -- 'r' = hit enter in Insert mode
-    -- 'o' = hit 'o' or 'O' in Normal mode
-    -- 'c' = auto-wrap long comments
+    local cur = vim.api.nvim_get_current_buf()
+    -- Build a set of buffers currently displayed in any window
+    local displayed = {}
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      displayed[vim.api.nvim_win_get_buf(win)] = true
+    end
+    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+      if bufnr ~= cur and vim.api.nvim_buf_is_valid(bufnr) then
+        if vim.api.nvim_buf_get_name(bufnr) == '' and not displayed[bufnr] then
+          pcall(vim.api.nvim_buf_delete, bufnr, {force = true})
+        end
+      end
+    end
+    -- Also keep original formatoptions removal
     vim.opt.formatoptions:remove { 'c', 'r', 'o' }
   end,
 })
