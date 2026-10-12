@@ -56,6 +56,7 @@ return {
           "vimdoc",
           "javascript",
           "typescript",
+          "scala",
         },
 
         callback = function()

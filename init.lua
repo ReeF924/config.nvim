@@ -595,9 +595,6 @@ require('lazy').setup({
     },
   },
 
-  -- Scala LSP via nvim-metals
-  { 'scalameta/nvim-metals', ft = { 'scala', 'sbt' }, config = function() end },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 

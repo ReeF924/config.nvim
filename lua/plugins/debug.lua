@@ -457,6 +457,25 @@ return {
         end,
       },
     }
+-- Scala debugging is provided through Metals.
+    dap.configurations.scala = {
+      {
+        type = 'scala',
+        request = 'launch',
+        name = 'Run or Test Current File',
+        metals = {
+          runType = 'runOrTestFile',
+        },
+      },
+      {
+        type = 'scala',
+        request = 'launch',
+        name = 'Test Target',
+        metals = {
+          runType = 'testTarget',
+        },
+      },
+    }
 
 -- Scala DAP configuration omitted: install scala-debug-adapter manually and add adapter config if needed
 
