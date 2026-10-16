@@ -94,7 +94,9 @@ vim.api.nvim_create_autocmd('BufEnter', {
     end
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
       if bufnr ~= cur and vim.api.nvim_buf_is_valid(bufnr) then
-        if vim.api.nvim_buf_get_name(bufnr) == '' and not displayed[bufnr] then
+        -- buflisted check spares unlisted scratch buffers (e.g. Telescope preview
+        -- buffers), which may be cached while not displayed in any window
+        if vim.api.nvim_buf_get_name(bufnr) == '' and vim.bo[bufnr].buflisted and not displayed[bufnr] then
           pcall(vim.api.nvim_buf_delete, bufnr, {force = true})
         end
       end
