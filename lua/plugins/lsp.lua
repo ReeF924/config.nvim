@@ -205,11 +205,11 @@ roslyn_ls = {
            end,
          },
         pyright = {
-           on_attach = function(client, bufnr)
-             -- Disable pyright diagnostics to avoid duplicate messages from ruff
-             client.handlers['textDocument/publishDiagnostics'] = function() end
-           end,
-          settings = {
+           -- Disable pyright diagnostics to avoid duplicate messages from ruff
+           handlers = {
+             ['textDocument/publishDiagnostics'] = function() end,
+           },
+           settings = {
             python = {
               analysis = {
                 typeCheckingMode = 'basic',
@@ -241,7 +241,6 @@ roslyn_ls = {
 
         -- Linters
         'markdownlint',
-        'ruff',
 
         -- DAPs
         'codelldb',
@@ -253,6 +252,7 @@ roslyn_ls = {
 
         -- LSPs
         'pyright',
+        'ruff',
       })
 
       -- Initialize Tool Installer
