@@ -97,7 +97,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
         -- buflisted check spares unlisted scratch buffers (e.g. Telescope preview
         -- buffers), which may be cached while not displayed in any window
         if vim.api.nvim_buf_get_name(bufnr) == '' and vim.bo[bufnr].buflisted and not displayed[bufnr] then
-          pcall(vim.api.nvim_buf_delete, bufnr, {force = true})
+          pcall(vim.api.nvim_buf_delete, bufnr, { force = true })
         end
       end
     end
@@ -598,7 +598,26 @@ require('lazy').setup({
   },
 
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  {
+    'folke/todo-comments.nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {
+      signs = false,
+      -- Match whole keywords only, with or without a trailing ':'
+      pattern = [[.*<(KEYWORDS)>]],
+      -- Add lowercase variants so 'todo', 'fixme', '@todo', etc. also match
+      keywords = {
+        FIX = { alt = { 'FIXME', 'BUG', 'FIXIT', 'ISSUE', 'fixme', 'fix', 'bug' } },
+        TODO = { alt = { 'todo' } },
+        HACK = { alt = { 'hack' } },
+        WARN = { alt = { 'WARNING', 'XXX', 'warn', 'warning' } },
+        PERF = { alt = { 'OPTIM', 'PERFORMANCE', 'OPTIMIZE', 'perf' } },
+        NOTE = { alt = { 'INFO', 'note', 'info' } },
+        TEST = { alt = { 'TESTING', 'test' } },
+      },
+    },
+  },
 
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
