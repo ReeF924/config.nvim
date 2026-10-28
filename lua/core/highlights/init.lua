@@ -24,6 +24,7 @@ local function apply_highlights()
     typescript = 'core.highlights.typescript',
     python = 'core.highlights.python',
     cs = 'core.highlights.cs',
+    scala = 'core.highlights.scala',
   }
 
   -- Apply highlights for the current buffer's filetype (if any)

@@ -13,7 +13,7 @@ local ts_hl = {
   ['@lsp.typemod.property.declaration.typescript'] = { fg = c.field_purple },
   ['@lsp.typemod.parameter.declaration.typescript'] = { fg = c.adwaita_white },
   ['@lsp.mod.local.typescript'] = { fg = c.adwaita_white },
-  ['@lsp.type.modifier.typescript'] = { fg = c.blue_gray },
+  ['@lsp.type.modifier.typescript'] = { fg = c.blue_grey },
   ['@lsp.typemod.type.defaultLibrary.typescript'] = { fg = c.primitive_blue },
   ['@lsp.typemod.variable.defaultLibrary.typescript'] = { fg = c.primitive_blue },
   ['@lsp.typemod.variable.global.typescript'] = { fg = c.primitive_blue },

@@ -18,9 +18,9 @@ local python_hl = {
   ['@function.builtin.python'] = { fg = c.method_yellow },
   ['@keyword.operator.python'] = { fg = c.operator },
 
-  ['@keyword.function.python'] = { fg = c.dark_blue_gray },
+  ['@keyword.function.python'] = { fg = c.dark_blue_grey },
   ['@keyword.type.python'] = { fg = c.dark_green },
-  ['@keyword.coroutine.python'] = { fg = c.dark_blue_gray },
+  ['@keyword.coroutine.python'] = { fg = c.dark_blue_grey },
 }
 
 return python_hl

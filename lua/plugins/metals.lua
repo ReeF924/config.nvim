@@ -16,11 +16,15 @@ return {
         metals = {
           useGlobalExecutable = true,
         },
+        automaticImportBuild = 'all',
+        showImplicitConversionsAndClasses = true,
       }
 
-      metals_config.on_attach = function(client, befnr)
-        require("metals").setup_dap()
-      end
+metals_config.on_attach = function(client, bufnr)
+         -- Disable semantic tokens to let Treesitter/operator highlight win
+         client.server_capabilities.semanticTokensProvider = nil
+         require("metals").setup_dap()
+       end
 
       metals_config.capabilities =
         require("blink.cmp").get_lsp_capabilities()
