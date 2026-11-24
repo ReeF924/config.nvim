@@ -94,7 +94,7 @@ return {
       vim.keymap.set('n', 'zm', function()
         require('ufo').openAllFolds() -- Reset state
         local bufnr = vim.api.nvim_get_current_buf()
-        local params = { textDocument = vim.lsp.util.make_text_document_params() }
+        local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
 
         -- Ask the LSP exactly where the methods and functions are
         vim.lsp.buf_request(bufnr, 'textDocument/documentSymbol', params, function(err, result)
